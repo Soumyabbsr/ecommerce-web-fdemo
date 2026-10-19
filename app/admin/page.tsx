@@ -71,7 +71,7 @@ export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [authChecking, setAuthChecking] = useState<boolean>(true);
   const [adminUser, setAdminUser] = useState<{ username: string; name: string; role: string } | null>(null);
-  const [adminUsername, setAdminUsername] = useState("admin");
+  const [adminUsername, setAdminUsername] = useState("");
   const [adminPassword, setAdminPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [authError, setAuthError] = useState("");
@@ -879,7 +879,7 @@ Height Veda is formulated with 15 concentrated Ayurvedic botanical extracts that
                   type="text"
                   required
                   autoComplete="username"
-                  placeholder="admin"
+                  placeholder="Enter username"
                   value={adminUsername}
                   onChange={(e) => setAdminUsername(e.target.value)}
                   className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 font-medium text-gray-900 transition bg-gray-50/50 hover:bg-white"
@@ -917,25 +917,6 @@ Height Veda is formulated with 15 concentrated Ayurvedic botanical extracts that
                     <Eye className="w-4 h-4" />
                   )}
                 </button>
-              </div>
-            </div>
-
-            {/* Database Credential Helper Card */}
-            <div className="p-3.5 rounded-2xl bg-gray-50 border border-gray-200 text-xs text-gray-600 space-y-1">
-              <div className="flex items-center gap-1.5 font-bold text-gray-800 text-[11px] uppercase tracking-wide">
-                <Shield className="w-3.5 h-3.5 text-emerald-600" />
-                <span>Database Default Credentials</span>
-              </div>
-              <div className="flex flex-wrap items-center gap-2 pt-0.5 text-[11px]">
-                <span className="text-gray-500">Username:</span>
-                <code className="bg-white px-2 py-0.5 rounded-md border border-gray-200 text-emerald-900 font-mono font-bold">
-                  admin
-                </code>
-                <span className="text-gray-400">·</span>
-                <span className="text-gray-500">Password:</span>
-                <code className="bg-white px-2 py-0.5 rounded-md border border-gray-200 text-emerald-900 font-mono font-bold">
-                  soumya!nSUPA09
-                </code>
               </div>
             </div>
 
