@@ -1,0 +1,501 @@
+{
+  "products": [
+    {
+      "name": "ghjvhjvhbbkjbjkb",
+      "slug": "ghjvhjvhbbkjbjkb",
+      "tagline": "100% Ayurvedic Forhbhbkbjkbmula for Natural Height Growth & Posture Alignment",
+      "sku": "HV-SKU-8127",
+      "description": "# Complete Ayurvedic Body Growth Acceleration Formula\n\nHeight Veda is formulated with 15 concentrated Ayurvedic botanical extracts that work synergistically to unlock natural growth potential, support spinal posture, and maximize bone density.\n\n## Key Benefits\n- **HGH Stimulation**: Promotes natural pituitary growth hormone release.\n- **Cartilage Extension**: Deep nourishment for spinal intervertebral discs.\n- **Asthi Dhatu Nutrition**: Enhances calcium absorption and bone mineral density.\n- **Ayush Certified**: 100% Herbal, GMP manufactured, zero steroids or synthetic hormones.\n\n## Recommended Daily Routine\n1. Mix 1 scoop of herbal powder with 200ml warm milk in the morning.\n2. Take 1 capsule after breakfast with water.\n3. Take 1 tablet after dinner with water before sleeping.\n4. Continue consistently for 90 days for peak results.\n",
+      "description_sections": [],
+      "description_images": [],
+      "images": [
+        "https://heightveda.com/wp-content/uploads/2026/10/Vati-Capsuel-Powder-2.webp",
+        "https://heightveda.com/wp-content/uploads/2026/09/HV-C-P-1.webp"
+      ],
+      "highlights": [
+        "Stimulates pituitary gland secretion naturally",
+        "Accelerates bone mineralization and density",
+        "Corrects spinal posture and cartilage extension",
+        "Ayush Certified 100% Herbal Formula"
+      ],
+      "dosage": "Mix 1 scoop of Height Veda Powder with 200ml warm milk in the morning. Take 1 capsule post-breakfast and 1 tablet after dinner with water. Continue for 45-90 days.",
+      "ingredients_list": [
+        {
+          "name": "Ashwagandha Extract",
+          "amount": "250mg",
+          "purpose": "Hormone stimulation & stress relief"
+        },
+        {
+          "name": "Shatavari Extract",
+          "amount": "150mg",
+          "purpose": "Tissue rejuvenation & vitality"
+        },
+        {
+          "name": "Safed Musli Extract",
+          "amount": "120mg",
+          "purpose": "Muscle & joint nourishment"
+        },
+        {
+          "name": "Amla (Natural Vitamin C)",
+          "amount": "100mg",
+          "purpose": "Natural Vitamin C & absorption"
+        },
+        {
+          "name": "Moringa Oleifera",
+          "amount": "100mg",
+          "purpose": "Bioavailable plant calcium"
+        },
+        {
+          "name": "Hadjod Bone Fortifier",
+          "amount": "100mg",
+          "purpose": "Bone fracture & density healer"
+        }
+      ],
+      "price": 2499,
+      "original_price": 6896,
+      "save_amount": 4397,
+      "discount_percent": 64,
+      "image_url": "https://heightveda.com/wp-content/uploads/2026/10/Vati-Capsuel-Powder-2.webp",
+      "badge": "★ Best Seller",
+      "is_featured": false,
+      "in_stock": true,
+      "stock_quantity": 150,
+      "category": "Full Kit",
+      "category_id": "cat-1",
+      "id": "prod-1792425385922",
+      "created_at": "2026-10-19T15:56:25.923Z"
+    },
+    {
+      "id": "prod-1",
+      "name": "Height Veda Kit",
+      "tagline": "Powder + 60 Capsules + 60 Tablets",
+      "description": "Complete Ayurvedic Growth formulation with dual-action herbal capsules, vitalizing tablets, and nutrient-dense powder for maximum height growth potential.",
+      "price": 2499,
+      "original_price": 6896,
+      "save_amount": 4397,
+      "image_url": "https://heightveda.com/wp-content/uploads/2026/10/Vati-Capsuel-Powder-2.webp",
+      "badge": "★ Featured Kit",
+      "is_featured": true,
+      "in_stock": true,
+      "category": "Full Kit",
+      "created_at": "2026-10-19T09:40:24.890Z",
+      "description_images": [
+        "https://heightveda.com/wp-content/uploads/2026/09/ChatGPT-Image-Sep-10-2026-12_39_01-PM.webp",
+        "https://heightveda.com/wp-content/uploads/2026/09/safe-checkout-webp.webp",
+        "https://heightveda.com/wp-content/uploads/2026/09/hv-review-10-scaled-1-150x150.webp"
+      ],
+      "highlights": [
+        "Stimulates pituitary gland secretion naturally",
+        "Accelerates bone mineralization and density",
+        "Corrects spinal posture and stretches cartilage",
+        "Non-hormonal & Ayush Certified pure herbs",
+        "Includes daily herbal powder, 60 capsules & 60 tablets"
+      ],
+      "dosage": "Mix 1 scoop of Height Veda Powder with 200ml warm milk in the morning. Take 1 capsule post-breakfast and 1 tablet after dinner with water. Continue for 45-90 days.",
+      "ingredients_list": [
+        {
+          "name": "Ashwagandha",
+          "amount": "250mg",
+          "purpose": "Hormone stimulation & stress relief"
+        },
+        {
+          "name": "Shatavari",
+          "amount": "150mg",
+          "purpose": "Tissue rejuvenation & vitality"
+        },
+        {
+          "name": "Safed Musli",
+          "amount": "120mg",
+          "purpose": "Muscle & joint nourishment"
+        },
+        {
+          "name": "Amla",
+          "amount": "100mg",
+          "purpose": "Natural Vitamin C & absorption"
+        },
+        {
+          "name": "Moringa",
+          "amount": "100mg",
+          "purpose": "Bioavailable plant calcium"
+        },
+        {
+          "name": "Hadjod",
+          "amount": "100mg",
+          "purpose": "Bone fracture & density healer"
+        }
+      ],
+      "discount_percent": 64,
+      "sku": "HV-KIT-001",
+      "stock_quantity": 250,
+      "description_sections": [
+        {
+          "id": "sec-1",
+          "type": "heading",
+          "title": "Synergistic 3-Stage Growth Formulation"
+        },
+        {
+          "id": "sec-2",
+          "type": "text",
+          "content": "Height Veda Kit is crafted according to authentic Charaka Samhita Rasayana principles, combining micro-pulverized organic herbs that stimulate pituitary secretion, improve bone mineral density, and relax spinal compression."
+        },
+        {
+          "id": "sec-3",
+          "type": "callout",
+          "title": "Clinical Safety & Certification",
+          "content": "Certified by the Ministry of Ayush, GMP certified, non-hormonal with zero chemical steroids or side effects. Suitable for men and women aged 12 to 35."
+        },
+        {
+          "id": "sec-4",
+          "type": "list",
+          "title": "Kit Components & Daily Supply",
+          "items": [
+            "1x 500g Nutrient Dense Growth Powder",
+            "1x 60 Ayurvedic Hormonal Balancing Capsules",
+            "1x 60 Vitalizing Bone Density Tablets",
+            "Free Comprehensive Diet & Stretching Routine Chart"
+          ]
+        }
+      ],
+      "images": [
+        "https://heightveda.com/wp-content/uploads/2026/10/Vati-Capsuel-Powder-2.webp",
+        "https://heightveda.com/wp-content/uploads/2026/09/HV-C-P-1.webp",
+        "https://heightveda.com/wp-content/uploads/2026/09/Capsule-HV-1.webp",
+        "https://heightveda.com/wp-content/uploads/2026/09/Powder-HV-1.webp"
+      ],
+      "slug": "height-veda-kit"
+    },
+    {
+      "id": "prod-2",
+      "name": "Combo Pack",
+      "tagline": "Only For Today",
+      "description": "Special synergistic dual-pack of Height Veda Powder and herbal booster capsules for accelerated bone and tissue development.",
+      "price": 2199,
+      "original_price": 5897,
+      "save_amount": 3698,
+      "image_url": "https://heightveda.com/wp-content/uploads/2026/09/HV-C-P-1.webp",
+      "badge": "Popular Combo",
+      "is_featured": false,
+      "in_stock": true,
+      "category": "Combo",
+      "created_at": "2026-10-19T09:40:24.891Z",
+      "description_images": [
+        "https://heightveda.com/wp-content/uploads/2026/09/ChatGPT-Image-Sep-10-2026-12_39_01-PM.webp",
+        "https://heightveda.com/wp-content/uploads/2026/09/safe-checkout-webp.webp"
+      ],
+      "highlights": [
+        "Dual action: Powder + Booster Capsules",
+        "Promotes joint lubrication and spinal expansion",
+        "Clinically evaluated Ayurvedic herbs",
+        "Free express pan-India delivery"
+      ],
+      "dosage": "1 scoop powder with milk in morning, 1 capsule at night after food.",
+      "ingredients_list": [
+        {
+          "name": "Ashwagandha",
+          "amount": "200mg",
+          "purpose": "Endocrine balance"
+        },
+        {
+          "name": "Safed Musli",
+          "amount": "150mg",
+          "purpose": "Tissue strength"
+        },
+        {
+          "name": "Moringa",
+          "amount": "100mg",
+          "purpose": "Bone minerals"
+        }
+      ],
+      "discount_percent": 63,
+      "sku": "HV-CMB-002",
+      "stock_quantity": 180,
+      "description_sections": [
+        {
+          "id": "sec-1",
+          "type": "heading",
+          "title": "Accelerated Joint & Bone Development"
+        },
+        {
+          "id": "sec-2",
+          "type": "text",
+          "content": "Formulated specifically for athletes, teenagers, and young adults who want an easy dual-regimen to power daily height growth and postural support."
+        }
+      ],
+      "images": [
+        "https://heightveda.com/wp-content/uploads/2026/09/HV-C-P-1.webp",
+        "https://heightveda.com/wp-content/uploads/2026/09/Capsule-HV-1.webp"
+      ],
+      "slug": "combo-pack"
+    },
+    {
+      "id": "prod-3",
+      "name": "Capsule",
+      "tagline": "60 Pure Ayurvedic Herbal Capsules",
+      "description": "Pure concentrated herbal extract capsules enriched with Ashwagandha, Shatavari, and Safed Musli for hormonal balance and growth plate activation.",
+      "price": 1899,
+      "original_price": 3898,
+      "save_amount": 1999,
+      "image_url": "https://heightveda.com/wp-content/uploads/2026/09/Capsule-HV-1.webp",
+      "badge": "",
+      "is_featured": false,
+      "in_stock": true,
+      "category": "Capsules",
+      "created_at": "2026-10-19T09:40:24.891Z",
+      "description_images": [
+        "https://heightveda.com/wp-content/uploads/2026/09/safe-checkout-webp.webp"
+      ],
+      "highlights": [
+        "60 vegetarian herbal capsules",
+        "Standardized 5:1 full-spectrum herb extracts",
+        "Enhances energy levels & metabolic rate"
+      ],
+      "dosage": "Take 1 capsule twice daily after meals with lukewarm water.",
+      "ingredients_list": [
+        {
+          "name": "Ashwagandha",
+          "amount": "250mg",
+          "purpose": "Cellular rejuvenation"
+        },
+        {
+          "name": "Gokhru",
+          "amount": "150mg",
+          "purpose": "Vitality & stamina"
+        }
+      ],
+      "discount_percent": 51,
+      "sku": "HV-CAP-003",
+      "stock_quantity": 320,
+      "description_sections": [
+        {
+          "id": "sec-1",
+          "type": "heading",
+          "title": "Standardized 5:1 Extract Capsules"
+        },
+        {
+          "id": "sec-2",
+          "type": "text",
+          "content": "60 vegetarian capsules with zero synthetic binders or preservatives. Promotes restful sleep and natural pituitary function."
+        }
+      ],
+      "images": [
+        "https://heightveda.com/wp-content/uploads/2026/09/Capsule-HV-1.webp"
+      ],
+      "slug": "capsule"
+    },
+    {
+      "id": "prod-4",
+      "name": "Powder",
+      "tagline": "45 Days Nourishment Formula",
+      "description": "Easily digestible daily Ayurvedic powder mix rich in plant-based calcium, moringa, amla, and minerals for bone density.",
+      "price": 1499,
+      "original_price": 1999,
+      "save_amount": 500,
+      "image_url": "https://heightveda.com/wp-content/uploads/2026/09/Powder-HV-1.webp",
+      "badge": "",
+      "is_featured": false,
+      "in_stock": true,
+      "category": "Powder",
+      "created_at": "2026-10-19T09:40:24.891Z",
+      "description_images": [
+        "https://heightveda.com/wp-content/uploads/2026/09/safe-checkout-webp.webp"
+      ],
+      "highlights": [
+        "45 days full supply pack",
+        "Delicious natural herbal taste",
+        "Rich in natural plant calcium"
+      ],
+      "dosage": "1 scoop daily with 200ml milk or water.",
+      "ingredients_list": [
+        {
+          "name": "Moringa",
+          "amount": "200mg",
+          "purpose": "Calcium matrix"
+        },
+        {
+          "name": "Amla",
+          "amount": "150mg",
+          "purpose": "Immunity & absorption"
+        }
+      ],
+      "discount_percent": 25,
+      "sku": "HV-PWD-004",
+      "stock_quantity": 140,
+      "description_sections": [
+        {
+          "id": "sec-1",
+          "type": "heading",
+          "title": "Bioavailable Plant-Calcium Matrix"
+        },
+        {
+          "id": "sec-2",
+          "type": "text",
+          "content": "Fortified with moringa and amla to maximize bone mineral absorption and strengthen cartilage elasticity."
+        }
+      ],
+      "images": [
+        "https://heightveda.com/wp-content/uploads/2026/09/Powder-HV-1.webp"
+      ],
+      "slug": "powder"
+    }
+  ],
+  "orders": [
+    {
+      "customer_name": "Test Customer",
+      "customer_phone": "9876543210",
+      "customer_email": "",
+      "address": "123 Test Street",
+      "city": "Delhi",
+      "state": "Delhi",
+      "pincode": "110001",
+      "product_id": "prod-1",
+      "product_name": "Height Veda Kit",
+      "quantity": 1,
+      "total_amount": 2499,
+      "discount_amount": 0,
+      "payment_method": "COD",
+      "status": "Pending",
+      "notes": "",
+      "id": "ord-1792403435292",
+      "order_number": "HV-53787",
+      "created_at": "2026-10-19T09:50:35.292Z",
+      "payment_status": "Pending",
+      "tracking_number": "",
+      "courier_partner": "Delhivery Surface"
+    },
+    {
+      "id": "ord-1",
+      "order_number": "HV-10821",
+      "customer_name": "Rahul Sharma",
+      "customer_phone": "9876543210",
+      "customer_email": "rahul.sharma@example.com",
+      "address": "Flat 402, Green Valley Apartments, Sector 14",
+      "city": "Jaipur",
+      "state": "Rajasthan",
+      "pincode": "302017",
+      "product_id": "prod-1",
+      "product_name": "Height Veda Kit",
+      "quantity": 1,
+      "total_amount": 2099,
+      "discount_amount": 400,
+      "payment_method": "Prepaid",
+      "status": "Delivered",
+      "notes": "Leave with security if not available",
+      "created_at": "2026-10-16T09:40:24.891Z",
+      "payment_status": "Paid",
+      "tracking_number": "",
+      "courier_partner": "Delhivery Surface"
+    },
+    {
+      "id": "ord-2",
+      "order_number": "HV-10822",
+      "customer_name": "Pooja Verma",
+      "customer_phone": "9811223344",
+      "customer_email": "pooja.v@example.com",
+      "address": "H.No. 54, Model Town Phase 2",
+      "city": "Ludhiana",
+      "state": "Punjab",
+      "pincode": "141002",
+      "product_id": "prod-2",
+      "product_name": "Combo Pack",
+      "quantity": 1,
+      "total_amount": 2199,
+      "discount_amount": 0,
+      "payment_method": "COD",
+      "status": "Shipped",
+      "notes": "Call before delivery",
+      "created_at": "2026-10-17T09:40:24.891Z",
+      "payment_status": "Pending",
+      "tracking_number": "",
+      "courier_partner": "Delhivery Surface"
+    },
+    {
+      "id": "ord-3",
+      "order_number": "HV-10823",
+      "customer_name": "Amit Patel",
+      "customer_phone": "9922334455",
+      "customer_email": "amit.p@example.com",
+      "address": "B-12 Nilkanth Society, Near Ring Road",
+      "city": "Ahmedabad",
+      "state": "Gujarat",
+      "pincode": "380015",
+      "product_id": "prod-1",
+      "product_name": "Height Veda Kit",
+      "quantity": 1,
+      "total_amount": 2499,
+      "discount_amount": 0,
+      "payment_method": "COD",
+      "status": "Confirmed",
+      "created_at": "2026-10-18T09:40:24.891Z",
+      "payment_status": "Pending",
+      "tracking_number": "",
+      "courier_partner": "Delhivery Surface"
+    },
+    {
+      "id": "ord-4",
+      "order_number": "HV-10824",
+      "customer_name": "Neha Joshi",
+      "customer_phone": "9733445566",
+      "customer_email": "neha.joshi@example.com",
+      "address": "Flat 12, Sunrise Residency, Baner",
+      "city": "Pune",
+      "state": "Maharashtra",
+      "pincode": "411045",
+      "product_id": "prod-3",
+      "product_name": "Capsule",
+      "quantity": 1,
+      "total_amount": 1499,
+      "discount_amount": 400,
+      "payment_method": "Prepaid",
+      "status": "Pending",
+      "created_at": "2026-10-19T05:40:24.891Z",
+      "payment_status": "Paid",
+      "tracking_number": "",
+      "courier_partner": "Delhivery Surface"
+    }
+  ],
+  "categories": [
+    {
+      "id": "cat-1",
+      "name": "Full Kit",
+      "slug": "full-kit",
+      "description": "Complete dual-action capsules, herbal tablets, and powder kits for maximum growth",
+      "image_url": "https://heightveda.com/wp-content/uploads/2026/10/Vati-Capsuel-Powder-2.webp",
+      "created_at": "2026-10-19T14:25:35.292Z"
+    },
+    {
+      "id": "cat-2",
+      "name": "Combo",
+      "slug": "combo",
+      "description": "Synergistic pairs for accelerated bone mineral absorption and active posture support",
+      "image_url": "https://heightveda.com/wp-content/uploads/2026/09/HV-C-P-1.webp",
+      "created_at": "2026-10-19T14:25:35.294Z"
+    },
+    {
+      "id": "cat-3",
+      "name": "Capsules",
+      "slug": "capsules",
+      "description": "Pure standardized herbal extract capsules for daily hormonal and tissue rejuvenation",
+      "image_url": "https://heightveda.com/wp-content/uploads/2026/09/Capsule-HV-1.webp",
+      "created_at": "2026-10-19T14:25:35.294Z"
+    },
+    {
+      "id": "cat-4",
+      "name": "Powder",
+      "slug": "powder",
+      "description": "Nutrient-rich calcium matrix powder mix for joint lubrication and bone density",
+      "image_url": "https://heightveda.com/wp-content/uploads/2026/09/Powder-HV-1.webp",
+      "created_at": "2026-10-19T14:25:35.294Z"
+    }
+  ],
+  "admin_users": [
+    {
+      "id": "admin-1",
+      "username": "admin",
+      "password_hash": "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9",
+      "name": "Height Veda Administrator",
+      "role": "Super Admin",
+      "created_at": "2026-10-19T17:29:48.394Z",
+      "last_login": "2026-10-19T17:43:15.921Z"
+    }
+  ]
+}

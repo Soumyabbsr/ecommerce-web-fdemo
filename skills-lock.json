@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "clone-website": {
+      "source": "lucasgrow/some-skills",
+      "sourceType": "github",
+      "skillPath": "clone-website/SKILL.md",
+      "computedHash": "bb2d4973a1ac7eaba1f3b831a8ffd5b405c3a61920aaec10cf7c92314b80af01"
+    }
+  }
+}
