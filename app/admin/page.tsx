@@ -934,7 +934,7 @@ Height Veda is formulated with 15 concentrated Ayurvedic botanical extracts that
                 <span className="text-gray-400">·</span>
                 <span className="text-gray-500">Password:</span>
                 <code className="bg-white px-2 py-0.5 rounded-md border border-gray-200 text-emerald-900 font-mono font-bold">
-                  admin123
+                  soumya!nSUPA09
                 </code>
               </div>
             </div>

@@ -182,14 +182,14 @@ ALTER TABLE admin_users ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Public Read Admin Users" ON admin_users FOR SELECT USING (true);
 CREATE POLICY "Public Manage Admin Users" ON admin_users FOR ALL USING (true);
 
--- Seed Default Admin User (username: admin / password: admin123)
+-- Seed Default Admin User (username: admin / password: soumya!nSUPA09)
 INSERT INTO admin_users (id, username, password_hash, name, role)
 VALUES (
     'admin-1',
     'admin',
-    '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9',
+    'c787d3dc84f0f16dba3521d9e3ac82e8c8b189335e790be5bee43dc342eb193d',
     'Height Veda Administrator',
     'Super Admin'
 )
-ON CONFLICT (id) DO NOTHING;
+ON CONFLICT (id) DO UPDATE SET password_hash = EXCLUDED.password_hash;
 
