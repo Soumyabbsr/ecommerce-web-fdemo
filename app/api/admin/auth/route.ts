@@ -89,8 +89,10 @@ export async function POST(request: Request) {
     return response;
   } catch (error) {
     console.error("Admin Auth Error:", error);
+    const errorMessage =
+      error instanceof Error ? error.message : "Internal authentication error";
     return NextResponse.json(
-      { success: false, error: "Internal authentication error" },
+      { success: false, error: errorMessage },
       { status: 500 }
     );
   }
