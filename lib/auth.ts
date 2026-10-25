@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import crypto from "crypto";
 
-const AUTH_SECRET = process.env.ADMIN_AUTH_SECRET || "heightveda_super_secure_admin_jwt_secret_2026";
+const AUTH_SECRET = process.env.ADMIN_AUTH_SECRET || "leafora_super_secure_admin_jwt_secret_2026";
 
 export function signAdminToken(username: string): string {
   const header = Buffer.from(JSON.stringify({ alg: "HS256", typ: "JWT" })).toString("base64url");

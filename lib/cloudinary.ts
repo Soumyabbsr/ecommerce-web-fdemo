@@ -21,7 +21,7 @@ export const isCloudinaryConfigured = (): boolean => {
 
 export async function uploadToCloudinary(
   buffer: Buffer,
-  folder = "heightveda_products"
+  folder = "leafora_products"
 ): Promise<string> {
   return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(

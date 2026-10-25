@@ -510,8 +510,8 @@ export default function AdminPage() {
         name: prod.name,
         slug: prod.slug || slugify(prod.name),
         tagline: prod.tagline || "",
-        sku: prod.sku || `HV-${prod.id.toUpperCase()}`,
-        category: prod.category || "Full Kit",
+        sku: prod.sku || `LEA-${prod.id.toUpperCase()}`,
+        category: prod.category || "Men's Vitality & Stamina",
         category_id: prod.category_id || "",
         price: String(prod.price),
         original_price: String(prod.original_price),
@@ -528,61 +528,58 @@ export default function AdminPage() {
           prod.highlights && prod.highlights.length > 0
             ? prod.highlights
             : [
-                "Stimulates pituitary gland secretion naturally",
-                "Accelerates bone mineralization and density",
-                "Corrects spinal posture and cartilage extension",
-                "Ayush Certified 100% Herbal Formula",
+                "100% Pure Standardized Ayurvedic Extracts",
+                "Non-Hormonal & Ayush Certified Formula",
+                "GMP Quality Manufactured & Clinically Tested",
+                "Visible Enduring Results with Zero Steroids",
               ],
         dosage:
           prod.dosage ||
-          "Mix 1 scoop of Height Veda Powder with 200ml warm milk in the morning. Take 1 capsule post-breakfast and 1 tablet after dinner with water. Continue for 45-90 days.",
+          "Take 1 capsule or 1 scoop powder twice daily with warm water or milk after meals. Consistent usage for 60-90 days recommended.",
         ingredients_list:
           prod.ingredients_list && prod.ingredients_list.length > 0
             ? prod.ingredients_list
             : [
-                { name: "Ashwagandha Extract", amount: "250mg", purpose: "Hormone stimulation & stress relief" },
-                { name: "Shatavari Extract", amount: "150mg", purpose: "Tissue rejuvenation & vitality" },
-                { name: "Safed Musli Extract", amount: "120mg", purpose: "Muscle & joint nourishment" },
-                { name: "Amla (Natural Vitamin C)", amount: "100mg", purpose: "Natural Vitamin C & absorption" },
-                { name: "Moringa Oleifera", amount: "100mg", purpose: "Bioavailable plant calcium" },
-                { name: "Hadjod Bone Fortifier", amount: "100mg", purpose: "Bone fracture & density healer" },
+                { name: "Shuddha Shilajit", amount: "150mg", purpose: "Stamina & cellular ATP energy" },
+                { name: "Ashwagandha Extract", amount: "200mg", purpose: "Vitality & stress reduction" },
+                { name: "Safed Musli Extract", amount: "100mg", purpose: "Deep tissue strength & nourishment" },
+                { name: "Gurmar Extract", amount: "150mg", purpose: "Pancreatic support & sugar control" },
               ],
       });
     } else {
       setEditingProduct(null);
-      const defaultDesc = `# Complete Ayurvedic Body Growth Acceleration Formula
+      const defaultDesc = `# Premium Ayurvedic Wellness Formulation
 
-Height Veda is formulated with 15 concentrated Ayurvedic botanical extracts that work synergistically to unlock natural growth potential, support spinal posture, and maximize bone density.
+Leafora Herbal Private Limited produces authentic classical Rasayana remedies formulated with 100% standardized botanicals. Clinically tested for maximum biological potency with zero steroids or chemicals.
 
 ## Key Benefits
-- **HGH Stimulation**: Promotes natural pituitary growth hormone release.
-- **Cartilage Extension**: Deep nourishment for spinal intervertebral discs.
-- **Asthi Dhatu Nutrition**: Enhances calcium absorption and bone mineral density.
-- **Ayush Certified**: 100% Herbal, GMP manufactured, zero steroids or synthetic hormones.
+- **Pure Botanical Power**: Standardized Ayurvedic herbs tested for active phyto-nutrients.
+- **Ayush & GMP Certified**: 100% Herbal, GMP manufactured, zero steroids or synthetic hormones.
+- **Deep Bioavailability**: Formulated according to classical Charaka Samhita Rasayana principles.
+- **Zero Side Effects**: Safe for long-term daily consumption.
 
 ## Recommended Daily Routine
-1. Mix 1 scoop of herbal powder with 200ml warm milk in the morning.
-2. Take 1 capsule after breakfast with water.
-3. Take 1 tablet after dinner with water before sleeping.
-4. Continue consistently for 90 days for peak results.
+1. Take morning dose 30 minutes before or after breakfast with warm water or milk.
+2. Take evening dose 30 minutes before or after dinner.
+3. Continue consistently for 60-90 days for peak sustained results.
 `;
 
       const initialImgs = [
-        "https://heightveda.com/wp-content/uploads/2026/10/Vati-Capsuel-Powder-2.webp",
-        "https://heightveda.com/wp-content/uploads/2026/09/HV-C-P-1.webp",
+        "/products/josh-1000.jpg",
+        "/products/time-master-combo.jpg",
       ];
 
       setProductForm({
         name: "",
         slug: "",
-        tagline: "100% Ayurvedic Formula for Natural Height Growth & Posture Alignment",
-        sku: `HV-SKU-${Math.floor(1000 + Math.random() * 9000)}`,
-        category: categories.length > 0 ? categories[0].name : "Full Kit",
-        category_id: categories.length > 0 ? categories[0].id : "",
-        price: "2499",
-        original_price: "6896",
-        discount_percent: "64",
-        stock_quantity: "150",
+        tagline: "100% Ayurvedic Formula · Ayush & GMP Certified",
+        sku: `LEA-SKU-${Math.floor(1000 + Math.random() * 9000)}`,
+        category: categories.length > 0 ? categories[0].name : "Men's Vitality & Stamina",
+        category_id: categories.length > 0 ? categories[0].id : "cat-vitality",
+        price: "899",
+        original_price: "2999",
+        discount_percent: "70",
+        stock_quantity: "200",
         in_stock: true,
         badge: "★ Best Seller",
         image_url: initialImgs[0],
@@ -591,20 +588,18 @@ Height Veda is formulated with 15 concentrated Ayurvedic botanical extracts that
         description_sections: [],
         description_images: [],
         highlights: [
-          "Stimulates pituitary gland secretion naturally",
-          "Accelerates bone mineralization and density",
-          "Corrects spinal posture and cartilage extension",
-          "Ayush Certified 100% Herbal Formula",
+          "100% Pure Standardized Ayurvedic Extracts",
+          "Non-Hormonal & Ayush Certified Formula",
+          "GMP Quality Manufactured & Clinically Tested",
+          "Visible Enduring Results with Zero Steroids",
         ],
         dosage:
-          "Mix 1 scoop of Height Veda Powder with 200ml warm milk in the morning. Take 1 capsule post-breakfast and 1 tablet after dinner with water. Continue for 45-90 days.",
+          "Take 1 capsule or 1 scoop powder twice daily with warm water or milk after meals. Consistent usage for 60-90 days recommended.",
         ingredients_list: [
-          { name: "Ashwagandha Extract", amount: "250mg", purpose: "Hormone stimulation & stress relief" },
-          { name: "Shatavari Extract", amount: "150mg", purpose: "Tissue rejuvenation & vitality" },
-          { name: "Safed Musli Extract", amount: "120mg", purpose: "Muscle & joint nourishment" },
-          { name: "Amla (Natural Vitamin C)", amount: "100mg", purpose: "Natural Vitamin C & absorption" },
-          { name: "Moringa Oleifera", amount: "100mg", purpose: "Bioavailable plant calcium" },
-          { name: "Hadjod Bone Fortifier", amount: "100mg", purpose: "Bone fracture & density healer" },
+          { name: "Shuddha Shilajit", amount: "150mg", purpose: "Stamina & cellular ATP energy" },
+          { name: "Ashwagandha Extract", amount: "200mg", purpose: "Vitality & stress reduction" },
+          { name: "Safed Musli Extract", amount: "100mg", purpose: "Deep tissue strength & nourishment" },
+          { name: "Gurmar Extract", amount: "150mg", purpose: "Pancreatic support & sugar control" },
         ],
       });
     }
@@ -1900,7 +1895,7 @@ Height Veda is formulated with 15 concentrated Ayurvedic botanical extracts that
                       <input
                         type="text"
                         required
-                        placeholder="e.g. Height Veda Kit - 3 Months Package"
+                        placeholder="e.g. Josh 1000 Capsule (30 Capsules)"
                         value={productForm.name}
                         onChange={(e) => {
                           const newName = e.target.value;
@@ -2320,7 +2315,7 @@ Height Veda is formulated with 15 concentrated Ayurvedic botanical extracts that
                       </label>
                       <input
                         type="text"
-                        placeholder="e.g. HV-KIT-001"
+                        placeholder="e.g. LEA-JOSH-1000"
                         value={productForm.sku}
                         onChange={(e) => setProductForm({ ...productForm, sku: e.target.value })}
                         className="w-full px-3.5 py-2.5 rounded-2xl border border-gray-300 text-xs sm:text-sm font-mono text-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-600"
