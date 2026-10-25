@@ -48,6 +48,7 @@ import {
   LogOut,
   Key,
   Shield,
+  Database,
 } from "lucide-react";
 import {
   Product,
@@ -172,6 +173,10 @@ export default function AdminPage() {
   const galleryFileInputRef = useRef<HTMLInputElement>(null);
   const categoryFileInputRef = useRef<HTMLInputElement>(null);
 
+  // Supabase One-Click Sync State
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [syncMessage, setSyncMessage] = useState("");
+
   // 1. Check Authentication on Mount
   useEffect(() => {
     const checkAuth = async () => {
@@ -269,6 +274,34 @@ export default function AdminPage() {
     setIsAuthenticated(false);
     setAdminUser(null);
     setAdminPassword("");
+  };
+
+  // Sync Local Products & Categories to Supabase Live
+  const handleSyncSupabase = async () => {
+    setIsSyncing(true);
+    setSyncMessage("");
+    try {
+      const token = localStorage.getItem("hv_admin_token");
+      const res = await fetch("/api/admin/sync", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      });
+      const data = await res.json();
+      if (data.success) {
+        setSyncMessage(`✓ ${data.message || "Synced successfully!"}`);
+        fetchData();
+      } else {
+        setSyncMessage(`✕ Sync Notice: ${data.error || data.message}`);
+      }
+    } catch (err: any) {
+      setSyncMessage(`✕ Error: ${err?.message || "Sync failed"}`);
+    } finally {
+      setIsSyncing(false);
+      setTimeout(() => setSyncMessage(""), 7000);
+    }
   };
 
   // Image File Uploader to Cloudinary/Local
@@ -1314,14 +1347,43 @@ Leafora Herbal Private Limited produces authentic classical Rasayana remedies fo
               </p>
             </div>
 
-            <button
-              onClick={() => openProductModal()}
-              className="px-4 py-2.5 rounded-xl bg-[#16341f] hover:bg-[#0f2415] text-white font-extrabold text-xs shadow-md transition flex items-center gap-1.5 cursor-pointer"
-            >
-              <Plus className="w-4 h-4" />
-              <span>+ Add New Product</span>
-            </button>
+            <div className="flex items-center gap-2.5">
+              <button
+                onClick={handleSyncSupabase}
+                disabled={isSyncing}
+                title="Synchronize Leafora products and categories with Supabase database"
+                className="px-3.5 py-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-300 font-bold text-xs transition flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+              >
+                {isSyncing ? (
+                  <Loader2 className="w-3.5 h-3.5 animate-spin text-emerald-700" />
+                ) : (
+                  <Database className="w-3.5 h-3.5 text-emerald-700" />
+                )}
+                <span>{isSyncing ? "Syncing..." : "Sync to Supabase"}</span>
+              </button>
+
+              <button
+                onClick={() => openProductModal()}
+                className="px-4 py-2.5 rounded-xl bg-[#16341f] hover:bg-[#0f2415] text-white font-extrabold text-xs shadow-md transition flex items-center gap-1.5 cursor-pointer"
+              >
+                <Plus className="w-4 h-4" />
+                <span>+ Add New Product</span>
+              </button>
+            </div>
           </div>
+
+          {syncMessage && (
+            <div
+              className={`p-3 rounded-2xl text-xs font-bold flex items-center gap-2 animate-in fade-in ${
+                syncMessage.startsWith("✓")
+                  ? "bg-emerald-50 border border-emerald-300 text-emerald-800"
+                  : "bg-amber-50 border border-amber-300 text-amber-900"
+              }`}
+            >
+              <Database className="w-4 h-4 shrink-0" />
+              <span>{syncMessage}</span>
+            </div>
+          )}
 
           {/* Search, Category & Stock Filter Controls */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">

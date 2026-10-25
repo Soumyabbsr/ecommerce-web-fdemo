@@ -12,6 +12,7 @@ import {
   AdminUser,
 } from "./types";
 import { supabase, isSupabaseConfigured } from "./supabase";
+import bundledStoreJson from "../data/store.json";
 
 const DATA_DIR = path.join(process.cwd(), "data");
 const STORE_FILE = path.join(DATA_DIR, "store.json");
@@ -523,7 +524,7 @@ export function ensureStore(): LocalStore {
           p.description_sections && p.description_sections.length > 0
             ? p.description_sections
             : initMatch?.description_sections || [];
-        const sku = p.sku || initMatch?.sku || `HV-${p.id.toUpperCase()}`;
+        const sku = p.sku || initMatch?.sku || `LEA-${p.id.toUpperCase()}`;
         const stockQty = p.stock_quantity ?? initMatch?.stock_quantity ?? 100;
 
         const saveAmt = Math.max(0, p.original_price - p.price);
@@ -577,6 +578,10 @@ export function ensureStore(): LocalStore {
 
     return parsed as LocalStore;
   } catch {
+    const bundled = bundledStoreJson as unknown as LocalStore;
+    if (bundled && bundled.products && bundled.products.length > 0) {
+      return bundled;
+    }
     return {
       categories: INITIAL_CATEGORIES,
       products: INITIAL_PRODUCTS,
@@ -603,6 +608,104 @@ function saveStore(data: LocalStore) {
 }
 
 /* =========================================================
+   0. AUTOMATED SUPABASE SYNC & RESEED API
+========================================================= */
+
+export async function syncLeaforaToSupabase(): Promise<{
+  success: boolean;
+  message: string;
+  count: number;
+}> {
+  if (!isSupabaseConfigured() || !supabase) {
+    return {
+      success: false,
+      message: "Supabase credentials are not configured in environment variables",
+      count: 0,
+    };
+  }
+
+  try {
+    // 1. Remove legacy height veda records if present
+    try {
+      await supabase
+        .from("products")
+        .delete()
+        .or("id.eq.prod-1,id.eq.prod-2,id.eq.prod-3,id.eq.prod-4,sku.ilike.HV-%");
+      await supabase
+        .from("categories")
+        .delete()
+        .or("id.eq.cat-1,id.eq.cat-2,id.eq.cat-3,id.eq.cat-4,slug.eq.full-kit");
+    } catch {
+      // Non-fatal if delete fails
+    }
+
+    // 2. Upsert categories
+    for (const cat of INITIAL_CATEGORIES) {
+      await supabase.from("categories").upsert({
+        id: cat.id,
+        name: cat.name,
+        slug: cat.slug,
+        description: cat.description,
+        image_url: cat.image_url,
+      });
+    }
+
+    // 3. Upsert products
+    for (const prod of INITIAL_PRODUCTS) {
+      await supabase.from("products").upsert({
+        id: prod.id,
+        name: prod.name,
+        slug: prod.slug,
+        tagline: prod.tagline,
+        sku: prod.sku,
+        description: prod.description,
+        description_sections: prod.description_sections || [],
+        description_images: prod.description_images || [],
+        images: prod.images || [prod.image_url],
+        highlights: prod.highlights || [],
+        dosage: prod.dosage || "",
+        ingredients_list: prod.ingredients_list || [],
+        price: prod.price,
+        original_price: prod.original_price,
+        save_amount: prod.save_amount,
+        discount_percent: prod.discount_percent,
+        image_url: prod.image_url,
+        badge: prod.badge || "",
+        is_featured: prod.is_featured ?? true,
+        in_stock: prod.in_stock ?? true,
+        stock_quantity: prod.stock_quantity ?? 100,
+        category: prod.category,
+        category_id: prod.category_id,
+      });
+    }
+
+    // 4. Upsert Admin User
+    for (const user of INITIAL_ADMIN_USERS) {
+      await supabase.from("admin_users").upsert({
+        id: user.id,
+        username: user.username,
+        password_hash: user.password_hash,
+        name: user.name,
+        role: user.role,
+      });
+    }
+
+    return {
+      success: true,
+      message: "Synced all 4 Leafora Herbal products and categories to Supabase Live!",
+      count: INITIAL_PRODUCTS.length,
+    };
+  } catch (err: any) {
+    console.error("Supabase sync error:", err);
+    return {
+      success: false,
+      message: err?.message || "Sync failed",
+      count: 0,
+    };
+  }
+}
+
+/* =========================================================
    1. CATEGORIES API
 ========================================================= */
 
@@ -617,9 +720,30 @@ export async function getCategories(): Promise<Category[]> {
         .order("created_at", { ascending: true });
 
       if (!error && data && data.length > 0) {
+        // Detect legacy Height Veda categories
+        const isOldData = data.some(
+          (c: any) =>
+            c.id === "cat-1" ||
+            c.slug === "full-kit" ||
+            c.name?.toLowerCase().includes("full kit") ||
+            (c.image_url && c.image_url.includes("heightveda"))
+        );
+
+        if (isOldData) {
+          syncLeaforaToSupabase().catch(() => {});
+          return INITIAL_CATEGORIES.map((c) => ({
+            ...c,
+            product_count: store.products.filter(
+              (p) => p.category === c.name || p.category_id === c.id
+            ).length,
+          }));
+        }
+
         return data.map((c) => ({
           ...c,
-          product_count: store.products.filter((p) => p.category === c.name || p.category_id === c.id).length,
+          product_count: store.products.filter(
+            (p) => p.category === c.name || p.category_id === c.id
+          ).length,
         })) as Category[];
       }
     } catch (e) {
@@ -754,7 +878,21 @@ export async function getProducts(options: GetProductsOptions = {}): Promise<Pro
 
       const { data, error } = await query;
       if (!error && data && data.length > 0) {
-        list = data as Product[];
+        // Detect legacy Height Veda products
+        const isOldData = data.some(
+          (p: any) =>
+            p.id === "prod-1" ||
+            p.sku?.startsWith("HV-") ||
+            p.name?.toLowerCase().includes("height") ||
+            (p.image_url && p.image_url.includes("heightveda"))
+        );
+
+        if (isOldData) {
+          syncLeaforaToSupabase().catch(() => {});
+          list = INITIAL_PRODUCTS;
+        } else {
+          list = data as Product[];
+        }
       }
     } catch (e) {
       console.warn("Supabase products fetch failed:", e);
@@ -1011,7 +1149,16 @@ export async function getOrders(options: GetOrdersOptions | string = {}): Promis
 
       const { data, error } = await query;
       if (!error && data && data.length > 0) {
-        ordersList = data as Order[];
+        const isOldOrders = data.some(
+          (o: any) =>
+            o.order_number?.startsWith("HV-") ||
+            o.product_name?.toLowerCase().includes("height")
+        );
+        if (isOldOrders) {
+          ordersList = store.orders;
+        } else {
+          ordersList = data as Order[];
+        }
       }
     } catch (e) {
       console.warn("Supabase orders fetch failed:", e);
@@ -1048,7 +1195,7 @@ export async function createOrder(
   const newOrder: Order = {
     ...orderData,
     id: `ord-${Date.now()}`,
-    order_number: `HV-${Math.floor(10000 + Math.random() * 90000)}`,
+    order_number: `LEA-${Math.floor(10000 + Math.random() * 90000)}`,
     payment_status: orderData.payment_status || (orderData.payment_method === "Prepaid" ? "Paid" : "Pending"),
     status: orderData.status || "Pending",
     courier_partner: orderData.courier_partner || "Delhivery Surface",
