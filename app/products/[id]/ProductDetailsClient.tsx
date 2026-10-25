@@ -294,12 +294,7 @@ export function ProductDetailsClient({
   const galleryImages =
     product.images && product.images.length > 0
       ? product.images
-      : [
-          product.image_url,
-          "https://heightveda.com/wp-content/uploads/2026/09/HV-C-P-1.webp",
-          "https://heightveda.com/wp-content/uploads/2026/09/Capsule-HV-1.webp",
-          "https://heightveda.com/wp-content/uploads/2026/09/Powder-HV-1.webp",
-        ].filter(Boolean);
+      : [product.image_url].filter(Boolean);
 
   const handleBuyNow = () => {
     router.push(`/checkout?productId=${product.id}&quantity=${quantity}`);

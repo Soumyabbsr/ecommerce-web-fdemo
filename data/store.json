@@ -1,341 +1,305 @@
 {
-  "products": [
+  "categories": [
     {
-      "name": "ghjvhjvhbbkjbjkb",
-      "slug": "ghjvhjvhbbkjbjkb",
-      "tagline": "100% Ayurvedic Forhbhbkbjkbmula for Natural Height Growth & Posture Alignment",
-      "sku": "HV-SKU-8127",
-      "description": "# Complete Ayurvedic Body Growth Acceleration Formula\n\nHeight Veda is formulated with 15 concentrated Ayurvedic botanical extracts that work synergistically to unlock natural growth potential, support spinal posture, and maximize bone density.\n\n## Key Benefits\n- **HGH Stimulation**: Promotes natural pituitary growth hormone release.\n- **Cartilage Extension**: Deep nourishment for spinal intervertebral discs.\n- **Asthi Dhatu Nutrition**: Enhances calcium absorption and bone mineral density.\n- **Ayush Certified**: 100% Herbal, GMP manufactured, zero steroids or synthetic hormones.\n\n## Recommended Daily Routine\n1. Mix 1 scoop of herbal powder with 200ml warm milk in the morning.\n2. Take 1 capsule after breakfast with water.\n3. Take 1 tablet after dinner with water before sleeping.\n4. Continue consistently for 90 days for peak results.\n",
-      "description_sections": [],
-      "description_images": [],
-      "images": [
-        "https://heightveda.com/wp-content/uploads/2026/10/Vati-Capsuel-Powder-2.webp",
-        "https://heightveda.com/wp-content/uploads/2026/09/HV-C-P-1.webp"
-      ],
-      "highlights": [
-        "Stimulates pituitary gland secretion naturally",
-        "Accelerates bone mineralization and density",
-        "Corrects spinal posture and cartilage extension",
-        "Ayush Certified 100% Herbal Formula"
-      ],
-      "dosage": "Mix 1 scoop of Height Veda Powder with 200ml warm milk in the morning. Take 1 capsule post-breakfast and 1 tablet after dinner with water. Continue for 45-90 days.",
-      "ingredients_list": [
-        {
-          "name": "Ashwagandha Extract",
-          "amount": "250mg",
-          "purpose": "Hormone stimulation & stress relief"
-        },
-        {
-          "name": "Shatavari Extract",
-          "amount": "150mg",
-          "purpose": "Tissue rejuvenation & vitality"
-        },
-        {
-          "name": "Safed Musli Extract",
-          "amount": "120mg",
-          "purpose": "Muscle & joint nourishment"
-        },
-        {
-          "name": "Amla (Natural Vitamin C)",
-          "amount": "100mg",
-          "purpose": "Natural Vitamin C & absorption"
-        },
-        {
-          "name": "Moringa Oleifera",
-          "amount": "100mg",
-          "purpose": "Bioavailable plant calcium"
-        },
-        {
-          "name": "Hadjod Bone Fortifier",
-          "amount": "100mg",
-          "purpose": "Bone fracture & density healer"
-        }
-      ],
-      "price": 2499,
-      "original_price": 6896,
-      "save_amount": 4397,
-      "discount_percent": 64,
-      "image_url": "https://heightveda.com/wp-content/uploads/2026/10/Vati-Capsuel-Powder-2.webp",
-      "badge": "★ Best Seller",
-      "is_featured": false,
-      "in_stock": true,
-      "stock_quantity": 150,
-      "category": "Full Kit",
-      "category_id": "cat-1",
-      "id": "prod-1792425385922",
-      "created_at": "2026-10-19T15:56:25.923Z"
+      "id": "cat-vitality",
+      "name": "Men's Vitality & Stamina",
+      "slug": "mens-vitality",
+      "description": "Ayurvedic formulations for strength, endurance, cellular stamina, and peak performance",
+      "image_url": "/products/josh-1000.jpg",
+      "created_at": "2026-10-25T09:33:29.139Z"
     },
     {
-      "id": "prod-1",
-      "name": "Height Veda Kit",
-      "tagline": "Powder + 60 Capsules + 60 Tablets",
-      "description": "Complete Ayurvedic Growth formulation with dual-action herbal capsules, vitalizing tablets, and nutrient-dense powder for maximum height growth potential.",
-      "price": 2499,
-      "original_price": 6896,
-      "save_amount": 4397,
-      "image_url": "https://heightveda.com/wp-content/uploads/2026/10/Vati-Capsuel-Powder-2.webp",
-      "badge": "★ Featured Kit",
-      "is_featured": true,
-      "in_stock": true,
-      "category": "Full Kit",
-      "created_at": "2026-10-19T09:40:24.890Z",
-      "description_images": [
-        "https://heightveda.com/wp-content/uploads/2026/09/ChatGPT-Image-Sep-10-2026-12_39_01-PM.webp",
-        "https://heightveda.com/wp-content/uploads/2026/09/safe-checkout-webp.webp",
-        "https://heightveda.com/wp-content/uploads/2026/09/hv-review-10-scaled-1-150x150.webp"
-      ],
-      "highlights": [
-        "Stimulates pituitary gland secretion naturally",
-        "Accelerates bone mineralization and density",
-        "Corrects spinal posture and stretches cartilage",
-        "Non-hormonal & Ayush Certified pure herbs",
-        "Includes daily herbal powder, 60 capsules & 60 tablets"
-      ],
-      "dosage": "Mix 1 scoop of Height Veda Powder with 200ml warm milk in the morning. Take 1 capsule post-breakfast and 1 tablet after dinner with water. Continue for 45-90 days.",
-      "ingredients_list": [
-        {
-          "name": "Ashwagandha",
-          "amount": "250mg",
-          "purpose": "Hormone stimulation & stress relief"
-        },
-        {
-          "name": "Shatavari",
-          "amount": "150mg",
-          "purpose": "Tissue rejuvenation & vitality"
-        },
-        {
-          "name": "Safed Musli",
-          "amount": "120mg",
-          "purpose": "Muscle & joint nourishment"
-        },
-        {
-          "name": "Amla",
-          "amount": "100mg",
-          "purpose": "Natural Vitamin C & absorption"
-        },
-        {
-          "name": "Moringa",
-          "amount": "100mg",
-          "purpose": "Bioavailable plant calcium"
-        },
-        {
-          "name": "Hadjod",
-          "amount": "100mg",
-          "purpose": "Bone fracture & density healer"
-        }
-      ],
-      "discount_percent": 64,
-      "sku": "HV-KIT-001",
-      "stock_quantity": 250,
+      "id": "cat-diabetes",
+      "name": "Diabetes & Sugar Care",
+      "slug": "diabetes-care",
+      "description": "Time-tested herbal botanicals for healthy glycemic control, insulin sensitivity, and pancreatic support",
+      "image_url": "/products/stop-sugar.jpg",
+      "created_at": "2026-10-25T09:33:29.140Z"
+    },
+    {
+      "id": "cat-combos",
+      "name": "Complete Regimen Packs",
+      "slug": "combos",
+      "description": "Synergistic oral capsules and topical herbal oils for comprehensive wellness",
+      "image_url": "/products/time-master-combo.jpg",
+      "created_at": "2026-10-25T09:33:29.140Z"
+    }
+  ],
+  "products": [
+    {
+      "id": "prod-josh-1000",
+      "name": "Josh 1000 Capsule",
+      "slug": "josh-1000-capsule",
+      "tagline": "Boost Stamina · Increase Energy · Improve Vitality (30 Capsules)",
+      "sku": "LEA-JOSH-1000",
+      "description": "Josh 1000 is Leafora Herbal Private Limited's flagship vitality formula designed for modern active men. Formulated with 100% pure standardized herbal extracts including Shuddha Shilajit, Ashwagandha, Safed Musli, and Kaunch Beej, it naturally restores stamina, revitalizes cellular ATP energy, reduces stress fatigue, and enhances physical vigor without steroids or side effects.",
       "description_sections": [
         {
           "id": "sec-1",
           "type": "heading",
-          "title": "Synergistic 3-Stage Growth Formulation"
+          "title": "Triple-Action Male Performance & Vigour Formula"
         },
         {
           "id": "sec-2",
           "type": "text",
-          "content": "Height Veda Kit is crafted according to authentic Charaka Samhita Rasayana principles, combining micro-pulverized organic herbs that stimulate pituitary secretion, improve bone mineral density, and relax spinal compression."
+          "content": "Crafted according to authentic Charaka Samhita Rasayana principles, Josh 1000 provides bioavailable bioactive withanolides and fulvic acid minerals to optimize endurance and vitality."
         },
         {
           "id": "sec-3",
           "type": "callout",
-          "title": "Clinical Safety & Certification",
-          "content": "Certified by the Ministry of Ayush, GMP certified, non-hormonal with zero chemical steroids or side effects. Suitable for men and women aged 12 to 35."
-        },
-        {
-          "id": "sec-4",
-          "type": "list",
-          "title": "Kit Components & Daily Supply",
-          "items": [
-            "1x 500g Nutrient Dense Growth Powder",
-            "1x 60 Ayurvedic Hormonal Balancing Capsules",
-            "1x 60 Vitalizing Bone Density Tablets",
-            "Free Comprehensive Diet & Stretching Routine Chart"
-          ]
+          "title": "100% Natural, Ayush Certified & Safe",
+          "content": "Zero steroids, zero synthetic stimulants, heavy-metal tested, and certified by the Ministry of Ayush. Safe for long-term daily consumption."
         }
       ],
+      "description_images": [],
       "images": [
-        "https://heightveda.com/wp-content/uploads/2026/10/Vati-Capsuel-Powder-2.webp",
-        "https://heightveda.com/wp-content/uploads/2026/09/HV-C-P-1.webp",
-        "https://heightveda.com/wp-content/uploads/2026/09/Capsule-HV-1.webp",
-        "https://heightveda.com/wp-content/uploads/2026/09/Powder-HV-1.webp"
-      ],
-      "slug": "height-veda-kit"
-    },
-    {
-      "id": "prod-2",
-      "name": "Combo Pack",
-      "tagline": "Only For Today",
-      "description": "Special synergistic dual-pack of Height Veda Powder and herbal booster capsules for accelerated bone and tissue development.",
-      "price": 2199,
-      "original_price": 5897,
-      "save_amount": 3698,
-      "image_url": "https://heightveda.com/wp-content/uploads/2026/09/HV-C-P-1.webp",
-      "badge": "Popular Combo",
-      "is_featured": false,
-      "in_stock": true,
-      "category": "Combo",
-      "created_at": "2026-10-19T09:40:24.891Z",
-      "description_images": [
-        "https://heightveda.com/wp-content/uploads/2026/09/ChatGPT-Image-Sep-10-2026-12_39_01-PM.webp",
-        "https://heightveda.com/wp-content/uploads/2026/09/safe-checkout-webp.webp"
+        "/products/josh-1000.jpg"
       ],
       "highlights": [
-        "Dual action: Powder + Booster Capsules",
-        "Promotes joint lubrication and spinal expansion",
-        "Clinically evaluated Ayurvedic herbs",
-        "Free express pan-India delivery"
+        "Boosts physical stamina and fights daily fatigue",
+        "Enhances natural vigor, endurance and strength",
+        "Standardized Ashwagandha, Shuddha Shilajit & Safed Musli",
+        "Non-hormonal, 100% Ayurvedic & Ayush Certified",
+        "30 Concentrated vegetarian capsules"
       ],
-      "dosage": "1 scoop powder with milk in morning, 1 capsule at night after food.",
+      "dosage": "Take 1 capsule twice daily with warm milk or water, preferably 30 minutes after meals. Consistent usage for 60-90 days gives optimal enduring results.",
       "ingredients_list": [
         {
           "name": "Ashwagandha",
           "amount": "200mg",
-          "purpose": "Endocrine balance"
+          "purpose": "Stress reduction & natural vitality"
+        },
+        {
+          "name": "Shuddha Shilajit",
+          "amount": "150mg",
+          "purpose": "Mitochondrial energy & cellular stamina"
         },
         {
           "name": "Safed Musli",
-          "amount": "150mg",
-          "purpose": "Tissue strength"
-        },
-        {
-          "name": "Moringa",
           "amount": "100mg",
-          "purpose": "Bone minerals"
-        }
-      ],
-      "discount_percent": 63,
-      "sku": "HV-CMB-002",
-      "stock_quantity": 180,
-      "description_sections": [
-        {
-          "id": "sec-1",
-          "type": "heading",
-          "title": "Accelerated Joint & Bone Development"
+          "purpose": "Muscle nourishment & strength"
         },
         {
-          "id": "sec-2",
-          "type": "text",
-          "content": "Formulated specifically for athletes, teenagers, and young adults who want an easy dual-regimen to power daily height growth and postural support."
+          "name": "Kaunch Beej",
+          "amount": "100mg",
+          "purpose": "Endurance & neuromuscular vitality"
+        },
+        {
+          "name": "Gokshura",
+          "amount": "100mg",
+          "purpose": "Micro-circulation & stamina support"
         }
       ],
-      "images": [
-        "https://heightveda.com/wp-content/uploads/2026/09/HV-C-P-1.webp",
-        "https://heightveda.com/wp-content/uploads/2026/09/Capsule-HV-1.webp"
-      ],
-      "slug": "combo-pack"
-    },
-    {
-      "id": "prod-3",
-      "name": "Capsule",
-      "tagline": "60 Pure Ayurvedic Herbal Capsules",
-      "description": "Pure concentrated herbal extract capsules enriched with Ashwagandha, Shatavari, and Safed Musli for hormonal balance and growth plate activation.",
-      "price": 1899,
-      "original_price": 3898,
-      "save_amount": 1999,
-      "image_url": "https://heightveda.com/wp-content/uploads/2026/09/Capsule-HV-1.webp",
-      "badge": "",
-      "is_featured": false,
+      "price": 899,
+      "original_price": 2999,
+      "save_amount": 2100,
+      "discount_percent": 70,
+      "image_url": "/products/josh-1000.jpg",
+      "badge": "🔥 70% OFF · Best Seller",
+      "is_featured": true,
       "in_stock": true,
-      "category": "Capsules",
-      "created_at": "2026-10-19T09:40:24.891Z",
-      "description_images": [
-        "https://heightveda.com/wp-content/uploads/2026/09/safe-checkout-webp.webp"
-      ],
-      "highlights": [
-        "60 vegetarian herbal capsules",
-        "Standardized 5:1 full-spectrum herb extracts",
-        "Enhances energy levels & metabolic rate"
-      ],
-      "dosage": "Take 1 capsule twice daily after meals with lukewarm water.",
-      "ingredients_list": [
-        {
-          "name": "Ashwagandha",
-          "amount": "250mg",
-          "purpose": "Cellular rejuvenation"
-        },
-        {
-          "name": "Gokhru",
-          "amount": "150mg",
-          "purpose": "Vitality & stamina"
-        }
-      ],
-      "discount_percent": 51,
-      "sku": "HV-CAP-003",
       "stock_quantity": 320,
-      "description_sections": [
-        {
-          "id": "sec-1",
-          "type": "heading",
-          "title": "Standardized 5:1 Extract Capsules"
-        },
-        {
-          "id": "sec-2",
-          "type": "text",
-          "content": "60 vegetarian capsules with zero synthetic binders or preservatives. Promotes restful sleep and natural pituitary function."
-        }
-      ],
-      "images": [
-        "https://heightveda.com/wp-content/uploads/2026/09/Capsule-HV-1.webp"
-      ],
-      "slug": "capsule"
+      "category": "Men's Vitality & Stamina",
+      "category_id": "cat-vitality",
+      "created_at": "2026-10-25T09:33:29.140Z"
     },
     {
-      "id": "prod-4",
-      "name": "Powder",
-      "tagline": "45 Days Nourishment Formula",
-      "description": "Easily digestible daily Ayurvedic powder mix rich in plant-based calcium, moringa, amla, and minerals for bone density.",
-      "price": 1499,
-      "original_price": 1999,
-      "save_amount": 500,
-      "image_url": "https://heightveda.com/wp-content/uploads/2026/09/Powder-HV-1.webp",
-      "badge": "",
-      "is_featured": false,
-      "in_stock": true,
-      "category": "Powder",
-      "created_at": "2026-10-19T09:40:24.891Z",
-      "description_images": [
-        "https://heightveda.com/wp-content/uploads/2026/09/safe-checkout-webp.webp"
-      ],
-      "highlights": [
-        "45 days full supply pack",
-        "Delicious natural herbal taste",
-        "Rich in natural plant calcium"
-      ],
-      "dosage": "1 scoop daily with 200ml milk or water.",
-      "ingredients_list": [
-        {
-          "name": "Moringa",
-          "amount": "200mg",
-          "purpose": "Calcium matrix"
-        },
-        {
-          "name": "Amla",
-          "amount": "150mg",
-          "purpose": "Immunity & absorption"
-        }
-      ],
-      "discount_percent": 25,
-      "sku": "HV-PWD-004",
-      "stock_quantity": 140,
+      "id": "prod-time-master",
+      "name": "Time Master Performance Combo (Oil + Capsule)",
+      "slug": "time-master-combo",
+      "tagline": "Instant Topical Action Oil (80ml) + 60 Stamina Capsules",
+      "sku": "LEA-TM-COMBO",
+      "description": "The Time Master Complete Performance System by Leafora Herbal Private Limited is a specialized dual-therapy designed for maximum confidence and peak vigor. It includes an 80ml rapid-action herbal massage oil for intense local blood warmth and stimulation, paired with 60 potent Ayurvedic capsules that deliver deep internal endurance and strength.",
       "description_sections": [
         {
           "id": "sec-1",
           "type": "heading",
-          "title": "Bioavailable Plant-Calcium Matrix"
+          "title": "Synergistic Dual-System: Topical Oil + Daily Oral Capsules"
         },
         {
           "id": "sec-2",
           "type": "text",
-          "content": "Fortified with moringa and amla to maximize bone mineral absorption and strengthen cartilage elasticity."
+          "content": "While the herbal oil provides direct micro-vascular circulation and sensory revitalization, the capsules nourish deeper tissues with concentrated Shilajit and revitalizing herbs."
         }
       ],
+      "description_images": [],
       "images": [
-        "https://heightveda.com/wp-content/uploads/2026/09/Powder-HV-1.webp"
+        "/products/time-master-combo.jpg"
       ],
-      "slug": "powder"
+      "highlights": [
+        "Dual pack: 80ml specialized massage oil + 60 vitality capsules",
+        "Fast-acting topical formula boosts blood flow and sensitivity",
+        "Internal capsules build long-lasting stamina and endurance",
+        "Non-greasy, pleasant natural herbal aroma",
+        "Clinically tested Ayush certified botanical ingredients"
+      ],
+      "dosage": "Capsules: Take 1 capsule morning and night with water or milk. Oil: Massage 5 to 7 drops gently once daily at night. Safe for consistent daily use.",
+      "ingredients_list": [
+        {
+          "name": "Malkangani & Clove Oil (Topical)",
+          "amount": "80ml blend",
+          "purpose": "Vascular stimulation & warmth"
+        },
+        {
+          "name": "Shilajit & Ashwagandha (Capsules)",
+          "amount": "350mg",
+          "purpose": "Endurance & systemic stamina"
+        },
+        {
+          "name": "Safed Musli & Akarkara",
+          "amount": "200mg",
+          "purpose": "Nerve revitalization & strength"
+        }
+      ],
+      "price": 1499,
+      "original_price": 4999,
+      "save_amount": 3500,
+      "discount_percent": 70,
+      "image_url": "/products/time-master-combo.jpg",
+      "badge": "👑 70% OFF · Complete Dual Regimen",
+      "is_featured": true,
+      "in_stock": true,
+      "stock_quantity": 180,
+      "category": "Men's Vitality & Stamina",
+      "category_id": "cat-vitality",
+      "created_at": "2026-10-25T09:33:29.140Z"
+    },
+    {
+      "id": "prod-stop-sugar",
+      "name": "Stop Sugar Anti-Diabetic Powder",
+      "slug": "stop-sugar-powder",
+      "tagline": "मधुमेह विनाशक चूर्ण · Natural Blood Sugar & Pancreatic Care",
+      "sku": "LEA-STOP-SUGAR",
+      "description": "Stop Sugar (मधुमेह विनाशक चूर्ण) is an authentic time-tested Ayurvedic botanical formulation by Leafora Herbal Private Limited. Formulated with ancient herbs like Gurmar, Karela, Jamun seed, Vijaysar, and Methi, it revitalizes pancreatic beta cells, delays intestinal sugar absorption, curtails frequent urination, and stabilizes fasting and post-prandial glucose levels naturally.",
+      "description_sections": [
+        {
+          "id": "sec-1",
+          "type": "heading",
+          "title": "Authentic Ayurvedic Blood Sugar Management"
+        },
+        {
+          "id": "sec-2",
+          "type": "text",
+          "content": "Works naturally to rejuvenate pancreatic function, boost peripheral glucose uptake, and safeguard vital organs from diabetic oxidative stress."
+        }
+      ],
+      "description_images": [],
+      "images": [
+        "/products/stop-sugar.jpg"
+      ],
+      "highlights": [
+        "Helps maintain healthy fasting & post-meal blood sugar levels",
+        "Gurmar extract naturally diminishes sugar cravings and absorption",
+        "Rejuvenates pancreatic beta cells to support healthy insulin response",
+        "Alleviates chronic diabetic lethargy, fatigue and excessive thirst",
+        "100% Pure micro-pulverized organic herbs, no chemicals"
+      ],
+      "dosage": "Mix 1 teaspoon (3-5g) with a glass of lukewarm water twice daily, 30 minutes before breakfast and dinner.",
+      "ingredients_list": [
+        {
+          "name": "Gurmar (Gymnema Sylvestre)",
+          "amount": "25%",
+          "purpose": "Blocks sugar receptors & supports pancreas"
+        },
+        {
+          "name": "Jamun Seed (Syzygium Cumini)",
+          "amount": "20%",
+          "purpose": "Retards starch-to-sugar conversion"
+        },
+        {
+          "name": "Karela (Momordica Charantia)",
+          "amount": "20%",
+          "purpose": "Plant polypeptide-P for glucose uptake"
+        },
+        {
+          "name": "Vijaysar (Pterocarpus Marsupium)",
+          "amount": "15%",
+          "purpose": "Restores pancreatic beta-cell health"
+        },
+        {
+          "name": "Methi & Neem",
+          "amount": "20%",
+          "purpose": "Insulin sensitivity & blood purification"
+        }
+      ],
+      "price": 799,
+      "original_price": 2699,
+      "save_amount": 1900,
+      "discount_percent": 70,
+      "image_url": "/products/stop-sugar.jpg",
+      "badge": "🌿 70% OFF · Proven Sugar Support",
+      "is_featured": true,
+      "in_stock": true,
+      "stock_quantity": 260,
+      "category": "Diabetes & Sugar Care",
+      "category_id": "cat-diabetes",
+      "created_at": "2026-10-25T09:33:29.140Z"
+    },
+    {
+      "id": "prod-diasure-powder",
+      "name": "Diasure Herb Powder",
+      "slug": "diasure-herb-powder",
+      "tagline": "Blend of 15 Potent Herbs for Managing Sugar (Net Wt. 200g)",
+      "sku": "LEA-DIASURE-200",
+      "description": "Diasure Herb Powder by Leafora Herbal Private Limited brings together 15 powerhouse Ayurvedic botanicals in an advanced synergistic blend. Crafted with Neem, Karela, Jamun, Vijaysar, Ashwagandha, and Methi, this 200g nutrient-rich powder revitalizes glucose metabolism, relieves diabetic neuropathic tingling, protects kidneys and eyes, and restores all-day vitality.",
+      "description_sections": [
+        {
+          "id": "sec-1",
+          "type": "heading",
+          "title": "Comprehensive 15-Botanical Metabolic Defense"
+        },
+        {
+          "id": "sec-2",
+          "type": "text",
+          "content": "Formulated to target the root metabolic imbalances behind unstable blood sugar while protecting kidney and heart wellness."
+        }
+      ],
+      "description_images": [],
+      "images": [
+        "/products/diasure-powder.jpg"
+      ],
+      "highlights": [
+        "Advanced synergy of 15 standardized Ayurvedic botanicals",
+        "Balances HbA1c levels and prevents post-meal energy slumps",
+        "Relieves nerve numbness, burning sensation in hands and feet",
+        "Protects renal and cardiovascular health from sugar oxidation",
+        "Net weight 200g, Ayush certified and 100% vegetarian"
+      ],
+      "dosage": "Take 1 level scoop (approx. 5g) with lukewarm water twice daily before meals.",
+      "ingredients_list": [
+        {
+          "name": "Neem & Karela Extract",
+          "amount": "30%",
+          "purpose": "Deep detox & insulin mimic"
+        },
+        {
+          "name": "Jamun & Vijaysar",
+          "amount": "25%",
+          "purpose": "Glucose equilibrium & pancreas support"
+        },
+        {
+          "name": "Ashwagandha & Pippali",
+          "amount": "20%",
+          "purpose": "Vitality, nerve strength & bioavailability"
+        },
+        {
+          "name": "Methi, Bilva & Triphala",
+          "amount": "25%",
+          "purpose": "Gut absorption & metabolic balance"
+        }
+      ],
+      "price": 899,
+      "original_price": 2999,
+      "save_amount": 2100,
+      "discount_percent": 70,
+      "image_url": "/products/diasure-powder.jpg",
+      "badge": "⭐ 70% OFF · 15 Herb Formula",
+      "is_featured": true,
+      "in_stock": true,
+      "stock_quantity": 210,
+      "category": "Diabetes & Sugar Care",
+      "category_id": "cat-diabetes",
+      "created_at": "2026-10-25T09:33:29.140Z"
     }
   ],
   "orders": [
@@ -453,40 +417,6 @@
       "courier_partner": "Delhivery Surface"
     }
   ],
-  "categories": [
-    {
-      "id": "cat-1",
-      "name": "Full Kit",
-      "slug": "full-kit",
-      "description": "Complete dual-action capsules, herbal tablets, and powder kits for maximum growth",
-      "image_url": "https://heightveda.com/wp-content/uploads/2026/10/Vati-Capsuel-Powder-2.webp",
-      "created_at": "2026-10-19T14:25:35.292Z"
-    },
-    {
-      "id": "cat-2",
-      "name": "Combo",
-      "slug": "combo",
-      "description": "Synergistic pairs for accelerated bone mineral absorption and active posture support",
-      "image_url": "https://heightveda.com/wp-content/uploads/2026/09/HV-C-P-1.webp",
-      "created_at": "2026-10-19T14:25:35.294Z"
-    },
-    {
-      "id": "cat-3",
-      "name": "Capsules",
-      "slug": "capsules",
-      "description": "Pure standardized herbal extract capsules for daily hormonal and tissue rejuvenation",
-      "image_url": "https://heightveda.com/wp-content/uploads/2026/09/Capsule-HV-1.webp",
-      "created_at": "2026-10-19T14:25:35.294Z"
-    },
-    {
-      "id": "cat-4",
-      "name": "Powder",
-      "slug": "powder",
-      "description": "Nutrient-rich calcium matrix powder mix for joint lubrication and bone density",
-      "image_url": "https://heightveda.com/wp-content/uploads/2026/09/Powder-HV-1.webp",
-      "created_at": "2026-10-19T14:25:35.294Z"
-    }
-  ],
   "admin_users": [
     {
       "id": "admin-1",
@@ -495,7 +425,7 @@
       "name": "Height Veda Administrator",
       "role": "Super Admin",
       "created_at": "2026-10-19T17:29:48.394Z",
-      "last_login": "2026-10-19T17:59:57.141Z"
+      "last_login": "2026-10-21T16:54:20.546Z"
     }
   ]
 }

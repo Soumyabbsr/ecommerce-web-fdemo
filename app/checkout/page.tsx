@@ -11,7 +11,7 @@ import { Product } from "@/lib/types";
 function CheckoutContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const productId = searchParams.get("productId") || "prod-1";
+  const productId = searchParams.get("productId") || "prod-josh-1000";
   const initialQty = parseInt(searchParams.get("quantity") || "1", 10);
 
   const [product, setProduct] = useState<Product | null>(null);
@@ -51,7 +51,7 @@ function CheckoutContent() {
       .catch((err) => console.error("Error loading product for checkout:", err));
   }, [productId]);
 
-  const subtotal = product ? product.price * quantity : 2499;
+  const subtotal = product ? product.price * quantity : 899;
   const prepaidDiscount = formData.paymentMethod === "Prepaid" ? 400 : 0;
   const totalAmount = Math.max(0, subtotal - prepaidDiscount);
 

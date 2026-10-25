@@ -1,58 +1,99 @@
 "use client";
 
 import React from "react";
-import { Users, Star, ShieldCheck, Sparkles } from "lucide-react";
+import { Users, Star, ShieldCheck, Sparkles, Award, Leaf, CheckCircle2, HeartPulse } from "lucide-react";
 
 export function About() {
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-white border-y border-gray-100" id="about-sec">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <section className="py-16 sm:py-20 md:py-24 bg-white border-b border-gray-100" id="about-sec">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         {/* Label */}
-        <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-emerald-800 bg-emerald-50 border border-emerald-200">
-          <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-          <span>About Height Veda</span>
+        <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider text-emerald-900 bg-emerald-100/80 border border-emerald-300">
+          <Sparkles className="w-3.5 h-3.5 text-emerald-700" />
+          <span>About Leafora Herbal Private Limited</span>
         </span>
 
         {/* Title */}
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mt-3 tracking-tight">
-          What is <span className="text-gradient-green">Height Veda?</span>
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 mt-3 tracking-tight">
+          Classical Ayurveda, <span className="text-gradient-green">Standardized for Modern Life</span>
         </h2>
 
         {/* Intro */}
-        <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto mt-2 leading-relaxed font-normal">
-          Height Veda is an authentic Ayurvedic body growth formulation crafted with 15 balanced, standardized botanicals and bioavailable minerals for children, teenagers, women, and men between ages 12–35.
+        <p className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto mt-3 leading-relaxed font-normal">
+          <strong>Leafora Herbal Private Limited</strong> was founded with a singular commitment: restoring authentic ancient Ayurvedic healing through scientifically validated, concentrated botanicals. We engineer targeted natural therapies for <strong>Men&apos;s Vitality &amp; Stamina</strong> and <strong>Blood Sugar &amp; Pancreatic Balance</strong>, completely free from chemicals, steroids, or artificial additives.
         </p>
 
-        {/* Hindi Highlight Card with Stats */}
-        <div className="mt-8 sm:mt-10 p-6 sm:p-9 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-[#16341f] via-[#102a18] to-[#0c1f12] text-white shadow-lg relative overflow-hidden text-center">
-          {/* Subtle background glow */}
-          <div className="absolute -top-12 -right-12 w-48 h-48 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none" />
+        {/* 4 Brand Pillars */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-10 text-left">
+          <div className="p-5 rounded-2xl bg-[#faf9f5] border border-gray-200/80 shadow-2xs">
+            <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center mb-3">
+              <Leaf className="w-5 h-5 text-emerald-700" />
+            </div>
+            <h4 className="text-sm font-black text-gray-900">100% Pure Herbs</h4>
+            <p className="text-xs text-gray-600 mt-1 leading-relaxed">
+              Ethically wild-harvested botanicals with active withanolides, fulvic acid, and charantin extracts.
+            </p>
+          </div>
 
-          <h3 className="text-xl sm:text-2xl font-bold text-emerald-300 mb-2 tracking-wide">
-            Height Veda काम कैसे करता है?
+          <div className="p-5 rounded-2xl bg-[#faf9f5] border border-gray-200/80 shadow-2xs">
+            <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center mb-3">
+              <Award className="w-5 h-5 text-amber-700" />
+            </div>
+            <h4 className="text-sm font-black text-gray-900">Ayush &amp; GMP Certified</h4>
+            <p className="text-xs text-gray-600 mt-1 leading-relaxed">
+              Manufactured under strict ISO &amp; GMP certified pharmaceutical facilities meeting clinical hygiene guidelines.
+            </p>
+          </div>
+
+          <div className="p-5 rounded-2xl bg-[#faf9f5] border border-gray-200/80 shadow-2xs">
+            <div className="w-10 h-10 rounded-xl bg-red-100 text-red-800 flex items-center justify-center mb-3">
+              <ShieldCheck className="w-5 h-5 text-red-700" />
+            </div>
+            <h4 className="text-sm font-black text-gray-900">Zero Side Effects</h4>
+            <p className="text-xs text-gray-600 mt-1 leading-relaxed">
+              Free from steroids, heavy metals, harmful sildenafil or synthetic hormones. Non-habit forming formulas.
+            </p>
+          </div>
+
+          <div className="p-5 rounded-2xl bg-[#faf9f5] border border-gray-200/80 shadow-2xs">
+            <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center mb-3">
+              <HeartPulse className="w-5 h-5 text-blue-700" />
+            </div>
+            <h4 className="text-sm font-black text-gray-900">Doctor Formulated</h4>
+            <p className="text-xs text-gray-600 mt-1 leading-relaxed">
+              Balanced according to authentic Charaka Samhita Rasayana principles for maximum biological bioavailability.
+            </p>
+          </div>
+        </div>
+
+        {/* Hindi Highlight Banner with Real Numbers */}
+        <div className="mt-10 p-6 sm:p-10 rounded-3xl bg-gradient-to-br from-[#0a2315] via-[#0e331e] to-[#06180e] text-white shadow-xl relative overflow-hidden text-center">
+          <div className="absolute -top-12 -right-12 w-64 h-64 bg-emerald-400/10 rounded-full blur-3xl pointer-events-none" />
+
+          <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-[#fbeea4] mb-3 tracking-wide">
+            Leafora Herbal — प्रकृति का शुद्ध, सुरक्षित और प्रभावी उपचार
           </h3>
 
-          <p className="text-xs sm:text-sm text-gray-200 max-w-xl mx-auto leading-relaxed mb-6 font-normal">
-            <strong className="text-white font-semibold">Height Veda</strong> में मौजूद 15 शुद्ध सुपर हर्ब्स शरीर को वो सभी प्राकृतिक पोषक तत्व प्रदान करती हैं, जो{" "}
-            <strong className="text-emerald-300 font-semibold">Height Growth</strong> और रीढ़ की हड्डी के समुचित विकास के लिए आवश्यक हैं।
+          <p className="text-xs sm:text-sm text-gray-200 max-w-2xl mx-auto leading-relaxed mb-8 font-normal">
+            <strong className="text-white font-bold">Leafora Herbal Private Limited</strong> के सभी उत्पाद प्राचीन आयुर्वेदिक ग्रंथों और आधुनिक वैज्ञानिक परीक्षणों के संगम से बनाए जाते हैं। हमारे उत्पाद पुरुषों की खोई हुई ऊर्जा, स्टैमिना, और शुगर के स्तर को प्राकृतिक रूप से नियंत्रित करने में पूर्णतः सक्षम हैं।
           </p>
 
           {/* Stats Bar */}
-          <div className="grid grid-cols-3 gap-3 pt-5 border-t border-emerald-800/60 max-w-lg mx-auto">
+          <div className="grid grid-cols-3 gap-4 pt-6 border-t border-emerald-800/60 max-w-xl mx-auto">
             <div className="flex flex-col items-center">
-              <Users className="w-4 h-4 text-emerald-400 mb-1" />
-              <span className="text-xl sm:text-2xl font-extrabold text-white">10,000+</span>
-              <span className="text-[11px] font-medium text-emerald-300 mt-0.5">Happy Users</span>
+              <Users className="w-5 h-5 text-emerald-400 mb-1" />
+              <span className="text-2xl sm:text-3xl font-black text-white">50,000+</span>
+              <span className="text-xs font-bold text-emerald-300 mt-0.5">Satisfied Users</span>
             </div>
             <div className="flex flex-col items-center border-x border-emerald-800/60">
-              <Star className="w-4 h-4 text-amber-400 fill-amber-400 mb-1" />
-              <span className="text-xl sm:text-2xl font-extrabold text-amber-400">4.9 / 5.0</span>
-              <span className="text-[11px] font-medium text-emerald-300 mt-0.5">Rating</span>
+              <Star className="w-5 h-5 text-amber-400 fill-amber-400 mb-1" />
+              <span className="text-2xl sm:text-3xl font-black text-amber-400">4.9 / 5.0</span>
+              <span className="text-xs font-bold text-emerald-300 mt-0.5">Doctor Rating</span>
             </div>
             <div className="flex flex-col items-center">
-              <ShieldCheck className="w-4 h-4 text-emerald-400 mb-1" />
-              <span className="text-xl sm:text-2xl font-extrabold text-emerald-400">100%</span>
-              <span className="text-[11px] font-medium text-emerald-300 mt-0.5">Ayurvedic</span>
+              <ShieldCheck className="w-5 h-5 text-emerald-400 mb-1" />
+              <span className="text-2xl sm:text-3xl font-black text-emerald-400">100%</span>
+              <span className="text-xs font-bold text-emerald-300 mt-0.5">Ayush Safe</span>
             </div>
           </div>
         </div>

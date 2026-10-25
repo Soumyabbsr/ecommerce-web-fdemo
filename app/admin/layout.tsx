@@ -4,8 +4,8 @@ import { Shield, ShoppingBag, ArrowLeft, Database } from "lucide-react";
 import { isSupabaseConfigured } from "@/lib/supabase";
 
 export const metadata = {
-  title: "Admin Panel | Height Veda E-Commerce",
-  description: "Product and Order management dashboard for Height Veda",
+  title: "Admin Panel | Leafora Herbal Private Limited",
+  description: "Product and Order management dashboard for Leafora Herbal Private Limited",
 };
 
 export default function AdminLayout({
@@ -21,12 +21,16 @@ export default function AdminLayout({
       <header className="bg-[#16341f] text-white sticky top-0 z-50 border-b border-emerald-950 shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link href="/admin" className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-emerald-500 text-white flex items-center justify-center font-black">
-                <Shield className="w-5 h-5" />
+            <Link href="/admin" className="flex items-center gap-3">
+              <div className="h-9 w-28 bg-white rounded-lg p-1 flex items-center justify-center shadow-xs">
+                <img
+                  src="/logo.png"
+                  alt="Leafora Herbal Private Limited"
+                  className="h-full w-full object-contain"
+                />
               </div>
-              <span className="font-extrabold text-lg tracking-tight">
-                Height Veda <span className="text-emerald-400 font-semibold text-sm">Admin</span>
+              <span className="font-extrabold text-base tracking-tight hidden sm:inline">
+                Leafora Herbal <span className="text-emerald-400 font-semibold text-xs">Admin</span>
               </span>
             </Link>
 

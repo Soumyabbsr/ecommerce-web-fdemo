@@ -29,7 +29,7 @@ export default async function OrderSuccessPage({
           </span>
 
           <h1 className="text-2xl sm:text-3xl font-black text-gray-900 mt-3">
-            Thank You for Choosing Height Veda!
+            Thank You for Choosing Leafora Herbal Private Limited!
           </h1>
 
           <p className="text-sm text-gray-600 mt-2 max-w-md mx-auto">

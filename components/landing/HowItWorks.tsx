@@ -1,102 +1,196 @@
 "use client";
 
 import React from "react";
-import { Check, SunMedium, Droplets, CalendarCheck, Sparkles } from "lucide-react";
-
-const BENEFITS = [
-  "Stimulates natural pituitary growth hormone release",
-  "Enhances bone mineralization & calcium absorption",
-  "Nourishes deep tissues, cartilage & muscle tone",
-  "Supports spinal decompression and posture alignment",
-  "Zero side effects, 100% Ayurvedic & non-hormonal",
-  "Dispatched across all India with Free Shipping",
-  "Formulated with 15 certified organic herbal extracts",
-  "Ministry of Ayush & GMP certified manufacturing",
-];
+import Link from "next/link";
+import {
+  Clock,
+  Sun,
+  Moon,
+  Sparkles,
+  CalendarCheck,
+  CheckCircle2,
+  ArrowRight,
+  ShieldCheck,
+  Zap,
+  Activity
+} from "lucide-react";
 
 export function HowItWorks() {
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-white" id="how-it-works">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-8 sm:mb-12">
-          <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-emerald-800 bg-emerald-50 border border-emerald-200">
-            <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Simple Daily Protocol</span>
+    <section className="py-16 sm:py-20 md:py-24 bg-white border-b border-gray-100" id="how-it-works">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Heading */}
+        <div className="text-center mb-12 sm:mb-16">
+          <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider text-emerald-900 bg-emerald-100/80 border border-emerald-300">
+            <Clock className="w-3.5 h-3.5 text-emerald-700" />
+            <span>Daily Regimen Protocol</span>
           </span>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mt-2.5 tracking-tight">
-            One Scoop A Day Is All It Takes
+
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 mt-3 tracking-tight">
+            How To Take <span className="text-gradient-green">Leafora Formulations</span>
           </h2>
-          <p className="text-xs sm:text-sm text-gray-600 max-w-xl mx-auto mt-1.5 font-normal">
-            A simple, effortless Ayurvedic daily routine — zero complicated diets or synthetic supplements.
+
+          <p className="text-sm sm:text-base text-gray-600 max-w-xl mx-auto mt-2 font-medium">
+            An effortless daily routine designed for optimal herbal bioavailability and fast absorption.
           </p>
         </div>
 
-        {/* Visual Graphic Container */}
-        <div className="max-w-3xl mx-auto rounded-2xl sm:rounded-3xl overflow-hidden shadow-sm border border-gray-100 bg-gray-50 mb-8 sm:mb-10">
-          <img
-            src="https://heightveda.com/wp-content/uploads/2026/09/ChatGPT-Image-Sep-10-2026-12_39_01-PM.webp"
-            alt="How to use Height Veda"
-            className="w-full h-auto object-cover"
-            onError={(e) => {
-              (e.target as HTMLImageElement).src =
-                "https://placehold.co/900x450/eaf7f0/16341f?text=Height+Veda+Routine";
-            }}
-          />
+        {/* 3 Step Protocol Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-14">
+          {/* Step 1: Morning Routine */}
+          <div className="rounded-3xl p-7 bg-[#faf9f5] border border-gray-200/90 shadow-sm relative overflow-hidden flex flex-col justify-between">
+            <div>
+              <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center mb-5">
+                <Sun className="w-6 h-6 text-amber-600" />
+              </div>
+
+              <span className="text-xs font-black uppercase tracking-widest text-amber-700">
+                Phase 1 · Morning
+              </span>
+
+              <h3 className="text-xl font-black text-gray-900 mt-1 mb-3">
+                Pre-Breakfast Activation
+              </h3>
+
+              <div className="space-y-3 text-xs sm:text-sm text-gray-700 leading-relaxed font-medium">
+                <div className="p-3 rounded-xl bg-white border border-gray-200">
+                  <strong className="block text-emerald-900 font-bold mb-0.5">
+                    🩸 Stop Sugar / Diasure Powder:
+                  </strong>
+                  Mix 1 level scoop (3-5g) with a glass of lukewarm water 30 minutes before breakfast. Prepares pancreatic receptors.
+                </div>
+
+                <div className="p-3 rounded-xl bg-white border border-gray-200">
+                  <strong className="block text-amber-900 font-bold mb-0.5">
+                    ⚡ Josh 1000 / Time Master Capsule:
+                  </strong>
+                  Take 1 capsule 30 minutes after breakfast with warm milk or water for all-day physical stamina.
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-4 mt-6 border-t border-gray-200 flex items-center gap-2 text-xs font-bold text-gray-500">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>Easy 2-minute daily habit</span>
+            </div>
+          </div>
+
+          {/* Step 2: Evening / Night Routine */}
+          <div className="rounded-3xl p-7 bg-[#faf9f5] border border-gray-200/90 shadow-sm relative overflow-hidden flex flex-col justify-between">
+            <div>
+              <div className="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-800 flex items-center justify-center mb-5">
+                <Moon className="w-6 h-6 text-indigo-600" />
+              </div>
+
+              <span className="text-xs font-black uppercase tracking-widest text-indigo-700">
+                Phase 2 · Evening &amp; Night
+              </span>
+
+              <h3 className="text-xl font-black text-gray-900 mt-1 mb-3">
+                Night Cellular Rejuvenation
+              </h3>
+
+              <div className="space-y-3 text-xs sm:text-sm text-gray-700 leading-relaxed font-medium">
+                <div className="p-3 rounded-xl bg-white border border-gray-200">
+                  <strong className="block text-emerald-900 font-bold mb-0.5">
+                    🩸 Pre-Dinner Powder Dose:
+                  </strong>
+                  Take second scoop of Stop Sugar or Diasure Powder before dinner to prevent post-meal sugar spikes and nighttime frequent urination.
+                </div>
+
+                <div className="p-3 rounded-xl bg-white border border-gray-200">
+                  <strong className="block text-amber-900 font-bold mb-0.5">
+                    👑 Time Master Topical Oil:
+                  </strong>
+                  Gently massage 5 to 7 drops of herbal oil on the local area once daily before bedtime. Stimulates micro-vascular circulation.
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-4 mt-6 border-t border-gray-200 flex items-center gap-2 text-xs font-bold text-gray-500">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>Overnight tissue regeneration</span>
+            </div>
+          </div>
+
+          {/* Step 3: 60-90 Day Transformation Timeline */}
+          <div className="rounded-3xl p-7 bg-gradient-to-br from-[#0c2415] via-[#10361f] to-[#07190e] text-white shadow-md relative overflow-hidden flex flex-col justify-between">
+            <div>
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 flex items-center justify-center mb-5">
+                <CalendarCheck className="w-6 h-6 text-emerald-300" />
+              </div>
+
+              <span className="text-xs font-black uppercase tracking-widest text-amber-300">
+                Phase 3 · Cumulative Results
+              </span>
+
+              <h3 className="text-xl font-black text-white mt-1 mb-3">
+                60-90 Day Transformation
+              </h3>
+
+              <ul className="space-y-3 text-xs sm:text-sm text-emerald-100/90 leading-relaxed">
+                <li className="flex items-start gap-2">
+                  <span className="w-5 h-5 rounded-full bg-emerald-700 text-white font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">
+                    1
+                  </span>
+                  <span>
+                    <strong>Days 1–15:</strong> Initial reduction in fatigue, improved stamina, and balanced digestion.
+                  </span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="w-5 h-5 rounded-full bg-emerald-700 text-white font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">
+                    2
+                  </span>
+                  <span>
+                    <strong>Days 16–45:</strong> Stabilized fasting glucose, active blood warmth, and strong endurance.
+                  </span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="w-5 h-5 rounded-full bg-emerald-700 text-white font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">
+                    3
+                  </span>
+                  <span>
+                    <strong>Days 46–90:</strong> Optimal HbA1c control, peak physical confidence, and deep cellular vitality.
+                  </span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="pt-4 mt-6 border-t border-emerald-800 flex items-center gap-2 text-xs font-bold text-amber-200">
+              <ShieldCheck className="w-4 h-4 text-emerald-400" />
+              <span>100% Non-Habit Forming &amp; Safe</span>
+            </div>
+          </div>
         </div>
 
-        {/* Dose Strip Card */}
-        <div className="rounded-2xl sm:rounded-3xl bg-[#16341f] text-white p-5 sm:p-8 md:p-9 shadow-lg flex flex-col md:flex-row items-center justify-between gap-6 sm:gap-8 mb-10 sm:mb-12">
-          <div className="max-w-md text-center md:text-left">
-            <h3 className="text-xl sm:text-2xl font-bold text-emerald-300">
-              Consistency is the key to natural growth.
-            </h3>
-            <p className="text-xs sm:text-sm text-gray-200 mt-1.5 leading-relaxed font-normal">
-              Same time, same daily routine — that gives your bones, spinal discs, and pituitary gland the optimal foundation to thrive.
+        {/* Free Ayush Doctor Consultation Box */}
+        <div className="rounded-3xl bg-[#faf8f4] border border-amber-300/80 p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+          <div className="space-y-1.5 text-center md:text-left">
+            <span className="text-xs font-black uppercase tracking-wider text-amber-800 bg-amber-100 px-3 py-1 rounded-full">
+              Free Ayush Consultation
+            </span>
+            <h4 className="text-xl sm:text-2xl font-black text-gray-900">
+              Need Personalized Dosage Advice?
+            </h4>
+            <p className="text-xs sm:text-sm text-gray-600 max-w-xl">
+              Our verified Ayurvedic practitioners are available 6 days a week to review your health goals and recommend the exact dosage plan for your body constitution (Prakriti).
             </p>
           </div>
 
-          <div className="grid grid-cols-3 gap-2.5 sm:gap-4 w-full md:w-auto">
-            <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-white/10 backdrop-blur-md text-center border border-white/10 flex flex-col items-center justify-center">
-              <SunMedium className="w-4 h-4 text-emerald-300 mb-1" />
-              <div className="text-xl sm:text-2xl font-extrabold text-white">1</div>
-              <div className="text-[10px] sm:text-[11px] font-semibold text-emerald-300 uppercase tracking-wider mt-0.5">
-                Scoop / Day
-              </div>
-            </div>
-
-            <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-white/10 backdrop-blur-md text-center border border-white/10 flex flex-col items-center justify-center">
-              <Droplets className="w-4 h-4 text-emerald-300 mb-1" />
-              <div className="text-xl sm:text-2xl font-extrabold text-white">200ml</div>
-              <div className="text-[10px] sm:text-[11px] font-semibold text-emerald-300 uppercase tracking-wider mt-0.5">
-                Warm Milk
-              </div>
-            </div>
-
-            <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-white/10 backdrop-blur-md text-center border border-white/10 flex flex-col items-center justify-center">
-              <CalendarCheck className="w-4 h-4 text-emerald-300 mb-1" />
-              <div className="text-xl sm:text-2xl font-extrabold text-white">45–90</div>
-              <div className="text-[10px] sm:text-[11px] font-semibold text-emerald-300 uppercase tracking-wider mt-0.5">
-                Days Cycle
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Benefits Continuous Marquee */}
-        <div className="w-full overflow-hidden bg-emerald-50/70 border border-emerald-200/60 rounded-xl sm:rounded-2xl py-3.5">
-          <div className="animate-marquee flex items-center space-x-6 sm:space-x-8 whitespace-nowrap">
-            {BENEFITS.concat(BENEFITS).map((benefit, idx) => (
-              <div
-                key={idx}
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white shadow-2xs text-xs font-semibold text-gray-800 border border-emerald-100"
-              >
-                <span className="w-4 h-4 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
-                  <Check className="w-2.5 h-2.5 text-emerald-700 stroke-[3]" />
-                </span>
-                <span>{benefit}</span>
-              </div>
-            ))}
+          <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+            <a
+              href="tel:07313626447"
+              className="py-3 px-6 rounded-2xl bg-[#0c2415] hover:bg-[#06170d] text-[#fbeea4] font-black text-xs sm:text-sm text-center shadow-md transition flex items-center justify-center gap-2"
+            >
+              <span>Call Doctor: 0731-3626447</span>
+            </a>
+            <Link
+              href="/#products-sec"
+              className="py-3 px-6 rounded-2xl bg-[#d4af37] hover:bg-[#b89228] text-gray-950 font-black text-xs sm:text-sm text-center shadow-md transition flex items-center justify-center gap-1.5"
+            >
+              <span>Explore Products (70% OFF)</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </div>

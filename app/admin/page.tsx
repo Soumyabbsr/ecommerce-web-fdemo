@@ -849,8 +849,12 @@ Height Veda is formulated with 15 concentrated Ayurvedic botanical extracts that
 
           {/* Header */}
           <div className="text-center space-y-2 pt-2">
-            <div className="w-16 h-16 rounded-2xl bg-[#16341f] text-white flex items-center justify-center mx-auto shadow-md ring-4 ring-emerald-50">
-              <Lock className="w-8 h-8 text-emerald-400" />
+            <div className="h-16 w-52 mx-auto flex items-center justify-center mb-1">
+              <img
+                src="/logo.png"
+                alt="Leafora Herbal Private Limited"
+                className="h-full w-full object-contain"
+              />
             </div>
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-emerald-50 text-emerald-800 border border-emerald-200">
               <Shield className="w-3 h-3 text-emerald-600" />
@@ -860,7 +864,7 @@ Height Veda is formulated with 15 concentrated Ayurvedic botanical extracts that
               Store Administrator Sign In
             </h2>
             <p className="text-xs text-gray-500 leading-relaxed max-w-xs mx-auto">
-              Direct database verification. Enter your administrator username and password to manage Height Veda.
+              Direct database verification. Enter your administrator username and password to manage Leafora Herbal Private Limited.
             </p>
           </div>
 

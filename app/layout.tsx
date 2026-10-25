@@ -2,37 +2,39 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Height Veda is a Body Growth Supplement - Height Veda",
+  title: "Leafora Herbal Private Limited - Healing Naturally",
   description:
-    "Height Veda is an Ayurvedic Body Growth Supplement. Elevate naturally, boost confidence, drive your potential. 100% Ayurvedic, Ayush certified with pure herbs.",
+    "Leafora Herbal Private Limited - Authentic Ayurvedic Wellness, Natural Supplements, and Herbal Care. 100% Ayurvedic, Ayush certified with pure herbs.",
   keywords: [
-    "Height Veda",
-    "Ayurvedic height supplement",
-    "Body growth supplement",
-    "Ashwagandha",
-    "Natural height growth",
+    "Leafora",
+    "Leafora Herbal",
+    "Leafora Herbal Private Limited",
+    "Ayurvedic body growth supplement",
+    "Ayurvedic wellness",
+    "Herbal health",
+    "Natural healing",
   ],
-  authors: [{ name: "Height Veda" }],
+  authors: [{ name: "Leafora Herbal Private Limited" }],
   openGraph: {
-    title: "Height Veda is a Body Growth Supplement - Height Veda",
+    title: "Leafora Herbal Private Limited - Healing Naturally",
     description:
-      "Natural Height Growth & Wellness Suite. 100% Ayurvedic · Clinically Tested.",
-    url: "https://heightveda.com",
-    siteName: "Height Veda",
+      "Natural Wellness & Ayurvedic Health Solutions. 100% Ayurvedic · Clinically Tested.",
+    url: "https://leaforaherbal.com",
+    siteName: "Leafora Herbal Private Limited",
     images: [
       {
-        url: "https://heightveda.com/wp-content/uploads/2026/09/logo.gif",
-        width: 600,
-        height: 200,
-        alt: "Height Veda Logo",
+        url: "/logo.png",
+        width: 1024,
+        height: 512,
+        alt: "Leafora Herbal Private Limited Logo",
       },
     ],
     locale: "en_US",
     type: "website",
   },
   icons: {
-    icon: "https://heightveda.com/wp-content/uploads/2026/09/cropped-Powder-HV-1024x1024-1-1-32x32.webp",
-    apple: "https://heightveda.com/wp-content/uploads/2026/09/cropped-Powder-HV-1024x1024-1-1-180x180.webp",
+    icon: "/logo.png",
+    apple: "/logo.png",
   },
 };
 

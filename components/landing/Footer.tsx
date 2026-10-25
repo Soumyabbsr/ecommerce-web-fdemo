@@ -13,20 +13,17 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
           {/* Brand Info */}
           <div className="space-y-4">
-            <Link href="/" className="inline-block">
-              <div className="relative h-12 w-48 bg-white/95 p-2 rounded-xl">
+            <Link href="/" className="inline-block group">
+              <div className="relative h-16 w-52 bg-white p-2 rounded-2xl shadow-sm border border-emerald-800/30 flex items-center justify-center">
                 <img
-                  src="https://heightveda.com/wp-content/uploads/2026/09/logo.gif"
-                  alt="Height Veda"
-                  className="h-full w-full object-contain"
-                  onError={(e) => {
-                    (e.target as HTMLElement).style.display = "none";
-                  }}
+                  src="/logo.png"
+                  alt="Leafora Herbal Private Limited"
+                  className="h-full w-full object-contain group-hover:scale-105 transition-transform duration-200"
                 />
               </div>
             </Link>
             <p className="text-sm text-emerald-200/90 leading-relaxed font-medium">
-              Natural Height Growth &amp; Wellness Suite. Time-tested Ayurvedic herbal formulations designed for natural body nourishment.
+              Leafora Herbal Private Limited — Healing Naturally. Time-tested Ayurvedic herbal formulations designed for natural body nourishment, vitality, and balance.
             </p>
             <div className="flex items-center gap-2 text-xs font-semibold text-emerald-300">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
@@ -53,7 +50,7 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="#hvProducts" className="hover:text-white transition flex items-center gap-2">
+                <Link href="#products-sec" className="hover:text-white transition flex items-center gap-2">
                   <Check className="w-3.5 h-3.5 text-emerald-400" />
                   <span>Products</span>
                 </Link>
@@ -159,9 +156,9 @@ export function Footer() {
 
         {/* Copyright */}
         <div className="pt-8 border-t border-emerald-900/70 text-center text-xs text-emerald-300/70 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p>© All Copyright {currentYear} Height Veda. Powered by <strong>Herbal Deck</strong></p>
+          <p>© All Copyright {currentYear} Leafora Herbal Private Limited. All Rights Reserved.</p>
           <p className="text-[11px] text-emerald-400/60">
-            Results may vary from person to person. Authentic product only on heightveda.com
+            Results may vary from person to person. Authentic products only on Leafora Herbal Private Limited.
           </p>
         </div>
       </div>

@@ -13,7 +13,7 @@ export function StickyCallButton({ className = "" }: { className?: string }) {
         background: "linear-gradient(135deg, #34d399 0%, #16341f 100%)",
         boxShadow: "0 8px 25px rgba(22, 52, 31, 0.4)",
       }}
-      title="Call Height Veda Helpline"
+      title="Call Leafora Herbal Private Limited Helpline"
     >
       <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-gray-900 shadow-md group-hover:rotate-12 transition-transform">
         <Phone className="w-4 h-4 fill-current text-gray-900" />
