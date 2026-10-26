@@ -56,9 +56,9 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="#expertview" className="hover:text-white transition flex items-center gap-2">
+                <Link href="#reviews-sec" className="hover:text-white transition flex items-center gap-2">
                   <Check className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Experts View</span>
+                  <span>Customer Reviews</span>
                 </Link>
               </li>
             </ul>

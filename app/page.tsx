@@ -6,7 +6,6 @@ import { ProductsSection } from "@/components/landing/Products";
 import { About } from "@/components/landing/About";
 import { Ingredients } from "@/components/landing/Ingredients";
 import { HowItWorks } from "@/components/landing/HowItWorks";
-import { ExpertsView } from "@/components/landing/ExpertsView";
 import { CustomerReviews } from "@/components/landing/CustomerReviews";
 import { Faqs } from "@/components/landing/Faqs";
 import { StickyCallButton } from "@/components/landing/StickyCallButton";
@@ -24,7 +23,6 @@ export default async function HomePage() {
         <About />
         <Ingredients />
         <HowItWorks />
-        <ExpertsView />
         <CustomerReviews />
         <Faqs />
       </main>
