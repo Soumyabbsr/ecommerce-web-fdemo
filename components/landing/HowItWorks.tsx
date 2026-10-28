@@ -179,10 +179,10 @@ export function HowItWorks() {
 
           <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
             <a
-              href="tel:07313626447"
+              href="tel:+918630552164"
               className="py-3 px-6 rounded-2xl bg-[#0c2415] hover:bg-[#06170d] text-[#fbeea4] font-black text-xs sm:text-sm text-center shadow-md transition flex items-center justify-center gap-2"
             >
-              <span>Call Doctor: 0731-3626447</span>
+              <span>Call Doctor: +91 8630552164</span>
             </a>
             <Link
               href="/#products-sec"

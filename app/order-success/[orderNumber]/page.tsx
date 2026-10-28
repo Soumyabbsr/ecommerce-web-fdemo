@@ -88,11 +88,11 @@ export default async function OrderSuccessPage({
             </Link>
 
             <a
-              href="tel:07313626447"
+              href="tel:+918630552164"
               className="py-3.5 px-6 rounded-2xl bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold text-sm transition flex items-center justify-center gap-2"
             >
               <PhoneCall className="w-4 h-4 text-emerald-700" />
-              <span>Need Help?</span>
+              <span>Helpline: +91 8630552164</span>
             </a>
           </div>
         </div>

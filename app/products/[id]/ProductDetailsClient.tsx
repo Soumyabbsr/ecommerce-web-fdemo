@@ -79,7 +79,7 @@ const INITIAL_REVIEWS: Review[] = [
     rating: 5.0,
     date: "19 August 2025",
     comment:
-      "Maine Height Veda ko 45 din tak regular use kiya, meri posture aur height me visible 2 inch improvement dikhi. Pure Ayurvedic product hai without any side effects.",
+      "Maine Leafora Herbal formulation ko 45 din tak regular use kiya, meri stamina aur energy level me visible improvement dikhi. Pure Ayurvedic product hai without any side effects.",
     verified: true,
     likes: 48,
   },
@@ -255,19 +255,19 @@ const STANDARD_FAQS = [
   },
   {
     q: "Are there any side effects, steroids, or chemical additives?",
-    a: "Zero side effects. Height Veda is 100% Ayurvedic, formulated with pure standardized herbs, and certified by the Ministry of Ayush. It is completely free from chemical steroids, synthetic hormones, heavy metals, or habit-forming substances.",
+    a: "Zero side effects. Leafora Herbal formulations are 100% Ayurvedic, formulated with pure standardized herbs, and certified by the Ministry of Ayush. They are completely free from chemical steroids, synthetic hormones, heavy metals, or habit-forming substances.",
   },
   {
-    q: "Can both boys and girls use Height Veda?",
-    a: "Yes. Height Veda is formulated for both males and females between ages 12 and 35. Its botanical extracts work naturally with human endocrine and skeletal systems.",
+    q: "Are Leafora Herbal formulations safe for long-term daily use?",
+    a: "Yes. All Leafora Herbal formulations are 100% classical Ayurvedic preparations certified by the Ministry of Ayush. They work synergistically with your body's natural metabolism and are completely non-habit forming.",
   },
   {
     q: "Is Cash on Delivery (COD) available with Free Shipping?",
     a: "Yes! We provide Free Pan-India Express Shipping on all orders. You can choose Cash on Delivery (COD) at checkout with zero extra fees, or pay online to enjoy an additional flat ₹400 instant prepaid discount.",
   },
   {
-    q: "Do I need a doctor's prescription to order Height Veda?",
-    a: "No prescription is required. Height Veda is classified as an authentic Ayurvedic proprietary formulation under Ayush guidelines and is completely safe for daily use as a health supplement.",
+    q: "Do I need a doctor's prescription to order Leafora Herbal products?",
+    a: "No prescription is required. Leafora Herbal formulations are classified as authentic Ayurvedic proprietary health supplements under Ayush guidelines and are completely safe for daily use.",
   },
   {
     q: "What daily routine should I follow for peak results?",
@@ -525,11 +525,11 @@ export function ProductDetailsClient({
               </button>
 
               <a
-                href="tel:07313626447"
+                href="tel:+918630552164"
                 className="w-full py-3.5 px-5 rounded-2xl bg-emerald-50 hover:bg-emerald-100 text-emerald-900 font-bold text-xs sm:text-sm border border-emerald-300 transition flex items-center justify-center gap-2 active:scale-98"
               >
                 <PhoneCall className="w-4 h-4 text-emerald-700" strokeWidth={2.2} />
-                <span>ORDER VIA CALL</span>
+                <span>ORDER VIA CALL (+91 8630552164)</span>
               </a>
             </div>
           </div>
@@ -590,7 +590,7 @@ export function ProductDetailsClient({
                   <RichMarkdownView content={product.description} />
                 ) : (
                   <p>
-                    Height Veda is formulated with 15 concentrated Ayurvedic botanical extracts that work together to support natural growth potential, spinal posture, and bone density.
+                    Leafora Herbal products are formulated with concentrated Ayurvedic botanical extracts that work together to support vitality, endurance, and natural bodily equilibrium.
                   </p>
                 )}
               </div>
@@ -793,7 +793,7 @@ export function ProductDetailsClient({
               </span>
               <p className="text-xs sm:text-sm font-medium text-gray-800 mt-1 leading-relaxed">
                 {product.dosage ||
-                  "Mix 1 scoop of Height Veda Powder with 200ml warm milk in the morning. Take 1 capsule after breakfast and 1 tablet after dinner with water. Continue for 45–90 days for peak results."}
+                  "Mix 1 scoop with warm water/milk or take 1 capsule twice daily after meals as directed on packaging. Continue consistently for 60–90 days for peak lasting results."}
               </p>
             </div>
 
@@ -984,7 +984,7 @@ export function ProductDetailsClient({
                     <textarea
                       required
                       rows={3}
-                      placeholder="Share your experience with Height Veda, duration of use, and visible changes..."
+                      placeholder="Share your experience with Leafora Herbal, duration of use, and visible changes..."
                       value={newReviewComment}
                       onChange={(e) => setNewReviewComment(e.target.value)}
                       className="w-full px-3 py-2 rounded-xl border border-gray-300 bg-white text-xs font-medium focus:outline-none focus:ring-2 focus:ring-emerald-600"
@@ -1143,7 +1143,7 @@ export function ProductDetailsClient({
         </div>
       </div>
 
-      {/* Other Height Veda Bundles Grid */}
+      {/* Other Leafora Herbal Formulations Grid */}
       <div className="space-y-4">
         <div className="text-center sm:text-left">
           <span className="text-[11px] font-semibold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">
@@ -1212,9 +1212,9 @@ export function ProductDetailsClient({
         <div className="max-w-md mx-auto flex items-center gap-2.5">
           {/* Quick Call Helpline Button */}
           <a
-            href="tel:07313626447"
+            href="tel:+918630552164"
             className="w-11 h-11 rounded-xl bg-emerald-50 hover:bg-emerald-100 active:scale-95 text-emerald-900 border border-emerald-300 flex items-center justify-center shrink-0 transition shadow-2xs"
-            title="Order via Call"
+            title="Order via Call (+91 8630552164)"
           >
             <PhoneCall className="w-4 h-4 text-emerald-800" strokeWidth={2.2} />
           </a>

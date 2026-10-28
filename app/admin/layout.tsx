@@ -39,7 +39,7 @@ export default function AdminLayout({
               <Database className="w-3.5 h-3.5 text-emerald-400" />
               <span>Database: </span>
               <strong className={isSupabaseActive ? "text-emerald-300" : "text-amber-300"}>
-                {isSupabaseActive ? "Supabase Live" : "Local Persistent"}
+                {isSupabaseActive ? "Supabase Live" : "Local Dev Mode"}
               </strong>
             </div>
           </div>

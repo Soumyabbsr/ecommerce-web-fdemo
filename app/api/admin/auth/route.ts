@@ -4,7 +4,7 @@ import {
   verifyAdminCredentials,
   getAdminUserByUsername,
   updateAdminUserLastLogin,
-  getAdminUsers,
+  updateAdminPassword,
 } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -53,7 +53,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // Verify credentials according to database
+    // Verify credentials according to Supabase database (with env fallback)
     const user = await verifyAdminCredentials(effectiveUsername, effectivePassword);
 
     if (!user) {
@@ -63,10 +63,10 @@ export async function POST(request: Request) {
       );
     }
 
-    // Generate signed token
+    // Generate signed JWT session token
     const token = signAdminToken(user.username);
 
-    // Update last login timestamp in DB
+    // Update last login timestamp in Supabase DB (no local JSON files)
     await updateAdminUserLastLogin(user.id);
 
     const response = NextResponse.json({
@@ -90,12 +90,52 @@ export async function POST(request: Request) {
     });
 
     return response;
-  } catch (error) {
-    console.error("Admin Auth Error:", error);
-    const errorMessage =
-      error instanceof Error ? error.message : "Internal authentication error";
+  } catch (error: any) {
+    console.error("[API] Admin Auth Error:", error);
     return NextResponse.json(
-      { success: false, error: errorMessage },
+      { success: false, error: error?.message || "Internal authentication error" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PATCH(request: Request) {
+  try {
+    const authResult = verifyAdminRequest(request);
+    if (!authResult.authenticated || !authResult.username) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized: Admin privileges required" },
+        { status: 401 }
+      );
+    }
+
+    const body = await request.json();
+    const { newPassword } = body;
+    if (!newPassword || typeof newPassword !== "string" || newPassword.trim().length < 6) {
+      return NextResponse.json(
+        { success: false, error: "New password must be at least 6 characters long" },
+        { status: 400 }
+      );
+    }
+
+    const user = await getAdminUserByUsername(authResult.username);
+    if (!user) {
+      return NextResponse.json(
+        { success: false, error: "Admin user not found in database" },
+        { status: 404 }
+      );
+    }
+
+    await updateAdminPassword(user.id, newPassword.trim());
+
+    return NextResponse.json({
+      success: true,
+      message: "Admin password updated successfully in database",
+    });
+  } catch (error: any) {
+    console.error("[API] Admin password update error:", error);
+    return NextResponse.json(
+      { success: false, error: error?.message || "Failed to update password" },
       { status: 500 }
     );
   }

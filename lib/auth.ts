@@ -84,3 +84,8 @@ export function verifyAdminRequest(req: Request | NextRequest): { authenticated:
 
   return { authenticated: false };
 }
+
+export function isAdminAuthorized(req: Request | NextRequest): boolean {
+  return verifyAdminRequest(req).authenticated;
+}
+

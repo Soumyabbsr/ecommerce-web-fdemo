@@ -89,7 +89,7 @@ function CheckoutContent() {
           state: formData.state || "India",
           pincode: formData.pincode,
           product_id: product?.id || "prod-1",
-          product_name: product?.name || "Height Veda Kit",
+          product_name: product?.name || "Leafora Herbal Formulation",
           quantity,
           total_amount: totalAmount,
           discount_amount: prepaidDiscount,
@@ -132,7 +132,7 @@ function CheckoutContent() {
           Customer Details &amp; Shipping
         </h1>
         <p className="text-xs sm:text-sm text-gray-500 mt-1">
-          Complete your information below to receive your genuine Height Veda kit.
+          Complete your information below to receive your genuine Leafora Herbal order.
         </p>
       </div>
 

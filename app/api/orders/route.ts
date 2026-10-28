@@ -13,10 +13,10 @@ export async function GET(request: Request) {
 
     const orders = await getOrders({ status, search, paymentMethod });
     return NextResponse.json({ success: true, orders });
-  } catch (error) {
-    console.error("Failed to fetch orders:", error);
+  } catch (error: any) {
+    console.error("[API] Failed to fetch orders:", error);
     return NextResponse.json(
-      { success: false, error: "Failed to load orders" },
+      { success: false, error: error?.message || "Failed to load orders" },
       { status: 500 }
     );
   }
@@ -26,9 +26,38 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    if (!body.customer_name || !body.customer_phone || !body.address || !body.pincode) {
+    if (!body.customer_name || !body.customer_name.trim()) {
       return NextResponse.json(
-        { success: false, error: "Full Name, Phone number, Address, and Pincode are required" },
+        { success: false, error: "Customer name is required" },
+        { status: 400 }
+      );
+    }
+
+    if (!body.customer_phone || !body.customer_phone.trim()) {
+      return NextResponse.json(
+        { success: false, error: "Customer 10-digit phone number is required" },
+        { status: 400 }
+      );
+    }
+
+    if (!body.address || !body.address.trim()) {
+      return NextResponse.json(
+        { success: false, error: "Delivery address is required" },
+        { status: 400 }
+      );
+    }
+
+    if (!body.pincode || !body.pincode.trim()) {
+      return NextResponse.json(
+        { success: false, error: "6-digit delivery pincode is required" },
+        { status: 400 }
+      );
+    }
+
+    const totalAmount = Number(body.total_amount || 0);
+    if (isNaN(totalAmount) || totalAmount < 0) {
+      return NextResponse.json(
+        { success: false, error: "Order total amount must be a positive number" },
         { status: 400 }
       );
     }
@@ -41,11 +70,11 @@ export async function POST(request: Request) {
       city: body.city?.trim() || "Not Specified",
       state: body.state?.trim() || "India",
       pincode: body.pincode.trim(),
-      product_id: body.product_id || "prod-1",
-      product_name: body.product_name || "Height Veda Kit",
-      quantity: Number(body.quantity || 1),
-      total_amount: Number(body.total_amount || 2499),
-      discount_amount: Number(body.discount_amount || 0),
+      product_id: body.product_id || "prod-josh-1000",
+      product_name: body.product_name || "Leafora Herbal Formulation",
+      quantity: Math.max(1, Number(body.quantity || 1)),
+      total_amount: totalAmount,
+      discount_amount: Math.max(0, Number(body.discount_amount || 0)),
       payment_method: body.payment_method === "Prepaid" ? "Prepaid" : "COD",
       payment_status: body.payment_status || (body.payment_method === "Prepaid" ? "Paid" : "Pending"),
       status: body.status || "Pending",
@@ -55,10 +84,10 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ success: true, order: newOrder }, { status: 201 });
-  } catch (error) {
-    console.error("Failed to create order:", error);
+  } catch (error: any) {
+    console.error("[API] Failed to create order:", error);
     return NextResponse.json(
-      { success: false, error: "Failed to place order" },
+      { success: false, error: error?.message || "Failed to place order in database" },
       { status: 500 }
     );
   }

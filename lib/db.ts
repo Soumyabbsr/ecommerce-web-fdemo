@@ -1,5 +1,3 @@
-import fs from "fs";
-import path from "path";
 import crypto from "crypto";
 import {
   Category,
@@ -11,11 +9,8 @@ import {
   PaymentStatus,
   AdminUser,
 } from "./types";
-import { supabase, isSupabaseConfigured } from "./supabase";
+import { getSupabaseServerClient, isSupabaseConfigured } from "./supabase";
 import bundledStoreJson from "../data/store.json";
-
-const DATA_DIR = path.join(process.cwd(), "data");
-const STORE_FILE = path.join(DATA_DIR, "store.json");
 
 export function slugify(text: string): string {
   if (!text) return "";
@@ -27,417 +22,19 @@ export function slugify(text: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
-export const INITIAL_CATEGORIES: Category[] = [
-  {
-    id: "cat-vitality",
-    name: "Men's Vitality & Stamina",
-    slug: "mens-vitality",
-    description: "Ayurvedic formulations for strength, endurance, cellular stamina, and peak performance",
-    image_url: "/products/josh-1000.jpg",
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: "cat-diabetes",
-    name: "Diabetes & Sugar Care",
-    slug: "diabetes-care",
-    description: "Time-tested herbal botanicals for healthy glycemic control, insulin sensitivity, and pancreatic support",
-    image_url: "/products/stop-sugar.jpg",
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: "cat-combos",
-    name: "Complete Regimen Packs",
-    slug: "combos",
-    description: "Synergistic oral capsules and topical herbal oils for comprehensive wellness",
-    image_url: "/products/time-master-combo.jpg",
-    created_at: new Date().toISOString(),
-  },
-];
-
-export const INITIAL_PRODUCTS: Product[] = [
-  {
-    "id": "prod-josh-1000",
-    "name": "Josh 1000 Capsule",
-    "slug": "josh-1000-capsule",
-    "tagline": "Boost Stamina · Increase Energy · Improve Vitality (30 Capsules)",
-    "sku": "LEA-JOSH-1000",
-    "description": "Josh 1000 is Leafora Herbal Private Limited's flagship vitality formula designed for modern active men. Formulated with 100% pure standardized herbal extracts including Shuddha Shilajit, Ashwagandha, Safed Musli, and Kaunch Beej, it naturally restores stamina, revitalizes cellular ATP energy, reduces stress fatigue, and enhances physical vigor without steroids or side effects.",
-    "description_sections": [
-      {
-        "id": "sec-1",
-        "type": "heading",
-        "title": "Triple-Action Male Performance & Vigour Formula"
-      },
-      {
-        "id": "sec-2",
-        "type": "text",
-        "content": "Crafted according to authentic Charaka Samhita Rasayana principles, Josh 1000 provides bioavailable bioactive withanolides and fulvic acid minerals to optimize endurance and vitality."
-      },
-      {
-        "id": "sec-3",
-        "type": "callout",
-        "title": "100% Natural, Ayush Certified & Safe",
-        "content": "Zero steroids, zero synthetic stimulants, heavy-metal tested, and certified by the Ministry of Ayush. Safe for long-term daily consumption."
-      }
-    ],
-    "description_images": [],
-    "images": [
-      "/products/josh-1000.jpg"
-    ],
-    "highlights": [
-      "Boosts physical stamina and fights daily fatigue",
-      "Enhances natural vigor, endurance and strength",
-      "Standardized Ashwagandha, Shuddha Shilajit & Safed Musli",
-      "Non-hormonal, 100% Ayurvedic & Ayush Certified",
-      "30 Concentrated vegetarian capsules"
-    ],
-    "dosage": "Take 1 capsule twice daily with warm milk or water, preferably 30 minutes after meals. Consistent usage for 60-90 days gives optimal enduring results.",
-    "ingredients_list": [
-      {
-        "name": "Ashwagandha",
-        "amount": "200mg",
-        "purpose": "Stress reduction & natural vitality"
-      },
-      {
-        "name": "Shuddha Shilajit",
-        "amount": "150mg",
-        "purpose": "Mitochondrial energy & cellular stamina"
-      },
-      {
-        "name": "Safed Musli",
-        "amount": "100mg",
-        "purpose": "Muscle nourishment & strength"
-      },
-      {
-        "name": "Kaunch Beej",
-        "amount": "100mg",
-        "purpose": "Endurance & neuromuscular vitality"
-      },
-      {
-        "name": "Gokshura",
-        "amount": "100mg",
-        "purpose": "Micro-circulation & stamina support"
-      }
-    ],
-    "price": 899,
-    "original_price": 2999,
-    "save_amount": 2100,
-    "discount_percent": 70,
-    "image_url": "/products/josh-1000.jpg",
-    "badge": "🔥 70% OFF · Best Seller",
-    "is_featured": true,
-    "in_stock": true,
-    "stock_quantity": 320,
-    "category": "Men's Vitality & Stamina",
-    "category_id": "cat-vitality",
-    "created_at": "2026-10-25T09:33:29.140Z"
-  },
-  {
-    "id": "prod-time-master",
-    "name": "Time Master Performance Combo (Oil + Capsule)",
-    "slug": "time-master-combo",
-    "tagline": "Instant Topical Action Oil (80ml) + 60 Stamina Capsules",
-    "sku": "LEA-TM-COMBO",
-    "description": "The Time Master Complete Performance System by Leafora Herbal Private Limited is a specialized dual-therapy designed for maximum confidence and peak vigor. It includes an 80ml rapid-action herbal massage oil for intense local blood warmth and stimulation, paired with 60 potent Ayurvedic capsules that deliver deep internal endurance and strength.",
-    "description_sections": [
-      {
-        "id": "sec-1",
-        "type": "heading",
-        "title": "Synergistic Dual-System: Topical Oil + Daily Oral Capsules"
-      },
-      {
-        "id": "sec-2",
-        "type": "text",
-        "content": "While the herbal oil provides direct micro-vascular circulation and sensory revitalization, the capsules nourish deeper tissues with concentrated Shilajit and revitalizing herbs."
-      }
-    ],
-    "description_images": [],
-    "images": [
-      "/products/time-master-combo.jpg"
-    ],
-    "highlights": [
-      "Dual pack: 80ml specialized massage oil + 60 vitality capsules",
-      "Fast-acting topical formula boosts blood flow and sensitivity",
-      "Internal capsules build long-lasting stamina and endurance",
-      "Non-greasy, pleasant natural herbal aroma",
-      "Clinically tested Ayush certified botanical ingredients"
-    ],
-    "dosage": "Capsules: Take 1 capsule morning and night with water or milk. Oil: Massage 5 to 7 drops gently once daily at night. Safe for consistent daily use.",
-    "ingredients_list": [
-      {
-        "name": "Malkangani & Clove Oil (Topical)",
-        "amount": "80ml blend",
-        "purpose": "Vascular stimulation & warmth"
-      },
-      {
-        "name": "Shilajit & Ashwagandha (Capsules)",
-        "amount": "350mg",
-        "purpose": "Endurance & systemic stamina"
-      },
-      {
-        "name": "Safed Musli & Akarkara",
-        "amount": "200mg",
-        "purpose": "Nerve revitalization & strength"
-      }
-    ],
-    "price": 1499,
-    "original_price": 4999,
-    "save_amount": 3500,
-    "discount_percent": 70,
-    "image_url": "/products/time-master-combo.jpg",
-    "badge": "👑 70% OFF · Complete Dual Regimen",
-    "is_featured": true,
-    "in_stock": true,
-    "stock_quantity": 180,
-    "category": "Men's Vitality & Stamina",
-    "category_id": "cat-vitality",
-    "created_at": "2026-10-25T09:33:29.140Z"
-  },
-  {
-    "id": "prod-stop-sugar",
-    "name": "Stop Sugar Anti-Diabetic Powder",
-    "slug": "stop-sugar-powder",
-    "tagline": "मधुमेह विनाशक चूर्ण · Natural Blood Sugar & Pancreatic Care",
-    "sku": "LEA-STOP-SUGAR",
-    "description": "Stop Sugar (मधुमेह विनाशक चूर्ण) is an authentic time-tested Ayurvedic botanical formulation by Leafora Herbal Private Limited. Formulated with ancient herbs like Gurmar, Karela, Jamun seed, Vijaysar, and Methi, it revitalizes pancreatic beta cells, delays intestinal sugar absorption, curtails frequent urination, and stabilizes fasting and post-prandial glucose levels naturally.",
-    "description_sections": [
-      {
-        "id": "sec-1",
-        "type": "heading",
-        "title": "Authentic Ayurvedic Blood Sugar Management"
-      },
-      {
-        "id": "sec-2",
-        "type": "text",
-        "content": "Works naturally to rejuvenate pancreatic function, boost peripheral glucose uptake, and safeguard vital organs from diabetic oxidative stress."
-      }
-    ],
-    "description_images": [],
-    "images": [
-      "/products/stop-sugar.jpg"
-    ],
-    "highlights": [
-      "Helps maintain healthy fasting & post-meal blood sugar levels",
-      "Gurmar extract naturally diminishes sugar cravings and absorption",
-      "Rejuvenates pancreatic beta cells to support healthy insulin response",
-      "Alleviates chronic diabetic lethargy, fatigue and excessive thirst",
-      "100% Pure micro-pulverized organic herbs, no chemicals"
-    ],
-    "dosage": "Mix 1 teaspoon (3-5g) with a glass of lukewarm water twice daily, 30 minutes before breakfast and dinner.",
-    "ingredients_list": [
-      {
-        "name": "Gurmar (Gymnema Sylvestre)",
-        "amount": "25%",
-        "purpose": "Blocks sugar receptors & supports pancreas"
-      },
-      {
-        "name": "Jamun Seed (Syzygium Cumini)",
-        "amount": "20%",
-        "purpose": "Retards starch-to-sugar conversion"
-      },
-      {
-        "name": "Karela (Momordica Charantia)",
-        "amount": "20%",
-        "purpose": "Plant polypeptide-P for glucose uptake"
-      },
-      {
-        "name": "Vijaysar (Pterocarpus Marsupium)",
-        "amount": "15%",
-        "purpose": "Restores pancreatic beta-cell health"
-      },
-      {
-        "name": "Methi & Neem",
-        "amount": "20%",
-        "purpose": "Insulin sensitivity & blood purification"
-      }
-    ],
-    "price": 799,
-    "original_price": 2699,
-    "save_amount": 1900,
-    "discount_percent": 70,
-    "image_url": "/products/stop-sugar.jpg",
-    "badge": "🌿 70% OFF · Proven Sugar Support",
-    "is_featured": true,
-    "in_stock": true,
-    "stock_quantity": 260,
-    "category": "Diabetes & Sugar Care",
-    "category_id": "cat-diabetes",
-    "created_at": "2026-10-25T09:33:29.140Z"
-  },
-  {
-    "id": "prod-diasure-powder",
-    "name": "Diasure Herb Powder",
-    "slug": "diasure-herb-powder",
-    "tagline": "Blend of 15 Potent Herbs for Managing Sugar (Net Wt. 200g)",
-    "sku": "LEA-DIASURE-200",
-    "description": "Diasure Herb Powder by Leafora Herbal Private Limited brings together 15 powerhouse Ayurvedic botanicals in an advanced synergistic blend. Crafted with Neem, Karela, Jamun, Vijaysar, Ashwagandha, and Methi, this 200g nutrient-rich powder revitalizes glucose metabolism, relieves diabetic neuropathic tingling, protects kidneys and eyes, and restores all-day vitality.",
-    "description_sections": [
-      {
-        "id": "sec-1",
-        "type": "heading",
-        "title": "Comprehensive 15-Botanical Metabolic Defense"
-      },
-      {
-        "id": "sec-2",
-        "type": "text",
-        "content": "Formulated to target the root metabolic imbalances behind unstable blood sugar while protecting kidney and heart wellness."
-      }
-    ],
-    "description_images": [],
-    "images": [
-      "/products/diasure-powder.jpg"
-    ],
-    "highlights": [
-      "Advanced synergy of 15 standardized Ayurvedic botanicals",
-      "Balances HbA1c levels and prevents post-meal energy slumps",
-      "Relieves nerve numbness, burning sensation in hands and feet",
-      "Protects renal and cardiovascular health from sugar oxidation",
-      "Net weight 200g, Ayush certified and 100% vegetarian"
-    ],
-    "dosage": "Take 1 level scoop (approx. 5g) with lukewarm water twice daily before meals.",
-    "ingredients_list": [
-      {
-        "name": "Neem & Karela Extract",
-        "amount": "30%",
-        "purpose": "Deep detox & insulin mimic"
-      },
-      {
-        "name": "Jamun & Vijaysar",
-        "amount": "25%",
-        "purpose": "Glucose equilibrium & pancreas support"
-      },
-      {
-        "name": "Ashwagandha & Pippali",
-        "amount": "20%",
-        "purpose": "Vitality, nerve strength & bioavailability"
-      },
-      {
-        "name": "Methi, Bilva & Triphala",
-        "amount": "25%",
-        "purpose": "Gut absorption & metabolic balance"
-      }
-    ],
-    "price": 899,
-    "original_price": 2999,
-    "save_amount": 2100,
-    "discount_percent": 70,
-    "image_url": "/products/diasure-powder.jpg",
-    "badge": "⭐ 70% OFF · 15 Herb Formula",
-    "is_featured": true,
-    "in_stock": true,
-    "stock_quantity": 210,
-    "category": "Diabetes & Sugar Care",
-    "category_id": "cat-diabetes",
-    "created_at": "2026-10-25T09:33:29.140Z"
-  }
-];
-
-export const INITIAL_ORDERS: Order[] = [
-  {
-    id: "ord-1",
-    order_number: "LEA-10821",
-    customer_name: "Rahul Sharma",
-    customer_phone: "9876543210",
-    customer_email: "rahul.sharma@example.com",
-    address: "Flat 402, Green Valley Apartments, Sector 14",
-    city: "Jaipur",
-    state: "Rajasthan",
-    pincode: "302017",
-    product_id: "prod-josh-1000",
-    product_name: "Josh 1000 Capsule",
-    quantity: 1,
-    total_amount: 899,
-    discount_amount: 0,
-    payment_method: "COD",
-    payment_status: "Pending",
-    status: "Delivered",
-    tracking_number: "BLUEDART-8829103",
-    courier_partner: "BlueDart Express",
-    estimated_delivery: "Delivered on 16 Oct 2026",
-    notes: "Leave with security if not available",
-    created_at: new Date(Date.now() - 86400000 * 3).toISOString(),
-  },
-  {
-    id: "ord-2",
-    order_number: "LEA-10822",
-    customer_name: "Pooja Verma",
-    customer_phone: "9811223344",
-    customer_email: "pooja.v@example.com",
-    address: "H.No. 54, Model Town Phase 2",
-    city: "Ludhiana",
-    state: "Punjab",
-    pincode: "141002",
-    product_id: "prod-time-master",
-    product_name: "Time Master Performance Combo (Oil + Capsule)",
-    quantity: 1,
-    total_amount: 1099,
-    discount_amount: 400,
-    payment_method: "Prepaid",
-    payment_status: "Paid",
-    status: "Shipped",
-    tracking_number: "DELHIVERY-7749102",
-    courier_partner: "Delhivery Surface",
-    estimated_delivery: "Expected by 21 Oct 2026",
-    notes: "Call before delivery",
-    created_at: new Date(Date.now() - 86400000 * 2).toISOString(),
-  },
-  {
-    id: "ord-3",
-    order_number: "LEA-10823",
-    customer_name: "Amit Patel",
-    customer_phone: "9922334455",
-    customer_email: "amit.p@example.com",
-    address: "B-12 Nilkanth Society, Near Ring Road",
-    city: "Ahmedabad",
-    state: "Gujarat",
-    pincode: "380015",
-    product_id: "prod-stop-sugar",
-    product_name: "Stop Sugar Anti-Diabetic Powder",
-    quantity: 1,
-    total_amount: 799,
-    discount_amount: 0,
-    payment_method: "COD",
-    payment_status: "Pending",
-    status: "Processing",
-    tracking_number: "",
-    courier_partner: "Ekart Logistics",
-    notes: "Standard order",
-    created_at: new Date(Date.now() - 86400000 * 1).toISOString(),
-  },
-  {
-    id: "ord-4",
-    order_number: "LEA-10824",
-    customer_name: "Siddharth Rao",
-    customer_phone: "9731234567",
-    customer_email: "siddharth.rao@example.com",
-    address: "42 Indiranagar 100ft Road",
-    city: "Bengaluru",
-    state: "Karnataka",
-    pincode: "560038",
-    product_id: "prod-diasure-powder",
-    product_name: "Diasure Herb Powder",
-    quantity: 2,
-    total_amount: 1398,
-    discount_amount: 400,
-    payment_method: "Prepaid",
-    payment_status: "Paid",
-    status: "Out for Delivery",
-    tracking_number: "SHADOWFAX-382910",
-    courier_partner: "Shadowfax Express",
-    notes: "Deliver before 5 PM",
-    created_at: new Date(Date.now() - 86400000 * 0.5).toISOString(),
-  },
-];
-
 export function hashPassword(password: string): string {
   return crypto.createHash("sha256").update(password.trim()).digest("hex");
 }
 
 export function verifyPassword(password: string, hash: string): boolean {
+  if (!password || !hash) return false;
   return hashPassword(password) === hash || password.trim() === hash.trim();
 }
 
-export const INITIAL_ADMIN_USERS: AdminUser[] = [
+export const INITIAL_CATEGORIES: Category[] = (bundledStoreJson.categories || []) as Category[];
+export const INITIAL_PRODUCTS: Product[] = (bundledStoreJson.products || []) as Product[];
+export const INITIAL_ORDERS: Order[] = (bundledStoreJson.orders || []) as Order[];
+export const INITIAL_ADMIN_USERS: AdminUser[] = (bundledStoreJson.admin_users || [
   {
     id: "admin-1",
     username: "admin",
@@ -446,169 +43,132 @@ export const INITIAL_ADMIN_USERS: AdminUser[] = [
     role: "Super Admin",
     created_at: new Date().toISOString(),
   },
-];
+]) as AdminUser[];
 
-interface LocalStore {
+// Safe In-Memory Store: Used only when Supabase is not configured (e.g., local offline development).
+// Absolutely NO local filesystem writes (fs.writeFileSync), preventing EROFS on read-only serverless platforms like Vercel.
+interface MemoryStore {
   categories: Category[];
   products: Product[];
   orders: Order[];
-  admin_users?: AdminUser[];
+  admin_users: AdminUser[];
 }
 
-export function ensureStore(): LocalStore {
-  try {
-    if (!fs.existsSync(DATA_DIR)) {
-      try {
-        fs.mkdirSync(DATA_DIR, { recursive: true });
-      } catch {
-        // Read-only serverless filesystem
-      }
+const memoryStore: MemoryStore = {
+  categories: JSON.parse(JSON.stringify(INITIAL_CATEGORIES)),
+  products: JSON.parse(JSON.stringify(INITIAL_PRODUCTS)),
+  orders: JSON.parse(JSON.stringify(INITIAL_ORDERS)),
+  admin_users: JSON.parse(JSON.stringify(INITIAL_ADMIN_USERS)),
+};
+
+// Helper: Normalize product record from Supabase / Memory
+function normalizeProduct(p: any): Product {
+  const price = Number(p.price || 0);
+  const originalPrice = Number(p.original_price || price);
+  const saveAmount =
+    p.save_amount !== undefined
+      ? Number(p.save_amount)
+      : Math.max(0, originalPrice - price);
+  const discountPercent =
+    p.discount_percent !== undefined
+      ? Number(p.discount_percent)
+      : originalPrice > 0
+      ? Math.round((saveAmount / originalPrice) * 100)
+      : 0;
+
+  let descSections = p.description_sections || [];
+  if (typeof descSections === "string") {
+    try {
+      descSections = JSON.parse(descSections);
+    } catch {
+      descSections = [];
     }
-
-    if (!fs.existsSync(STORE_FILE)) {
-      const initial: LocalStore = {
-        categories: INITIAL_CATEGORIES,
-        products: INITIAL_PRODUCTS,
-        orders: INITIAL_ORDERS,
-        admin_users: INITIAL_ADMIN_USERS,
-      };
-      try {
-        fs.writeFileSync(STORE_FILE, JSON.stringify(initial, null, 2), "utf-8");
-      } catch {
-        // Read-only serverless filesystem
-      }
-      return initial;
-    }
-
-    const raw = fs.readFileSync(STORE_FILE, "utf-8");
-    const parsed = JSON.parse(raw) as Partial<LocalStore>;
-    let modified = false;
-
-    // ensure admin users exist
-    if (!parsed.admin_users || !Array.isArray(parsed.admin_users) || parsed.admin_users.length === 0) {
-      parsed.admin_users = INITIAL_ADMIN_USERS;
-      modified = true;
-    }
-
-    // ensure categories exist
-    if (!parsed.categories || !Array.isArray(parsed.categories) || parsed.categories.length === 0) {
-      parsed.categories = INITIAL_CATEGORIES;
-      modified = true;
-    }
-
-    // ensure products have all modern fields
-    if (!parsed.products || !Array.isArray(parsed.products)) {
-      parsed.products = INITIAL_PRODUCTS;
-      modified = true;
-    } else {
-      parsed.products = parsed.products.map((p) => {
-        const initMatch = INITIAL_PRODUCTS.find((ip) => ip.id === p.id);
-        const descImages =
-          p.description_images && p.description_images.length > 0
-            ? p.description_images
-            : initMatch?.description_images || [];
-        const mainImages =
-          p.images && p.images.length > 0
-            ? p.images
-            : initMatch?.images || [p.image_url];
-        const highlights =
-          p.highlights && p.highlights.length > 0
-            ? p.highlights
-            : initMatch?.highlights || [];
-        const dosage = p.dosage || initMatch?.dosage || "";
-        const ingredients =
-          p.ingredients_list && p.ingredients_list.length > 0
-            ? p.ingredients_list
-            : initMatch?.ingredients_list || [];
-        const sections =
-          p.description_sections && p.description_sections.length > 0
-            ? p.description_sections
-            : initMatch?.description_sections || [];
-        const sku = p.sku || initMatch?.sku || `LEA-${p.id.toUpperCase()}`;
-        const stockQty = p.stock_quantity ?? initMatch?.stock_quantity ?? 100;
-
-        const saveAmt = Math.max(0, p.original_price - p.price);
-        const discPct =
-          p.original_price > 0 ? Math.round((saveAmt / p.original_price) * 100) : 0;
-
-        const slug = p.slug || initMatch?.slug || slugify(p.name);
-        if (!p.slug) {
-          modified = true;
-        }
-
-        return {
-          ...p,
-          slug,
-          sku,
-          stock_quantity: stockQty,
-          description_sections: sections,
-          description_images: descImages,
-          images: mainImages,
-          highlights,
-          dosage,
-          ingredients_list: ingredients,
-          save_amount: saveAmt,
-          discount_percent: discPct,
-          category: p.category || initMatch?.category || "General",
-        };
-      });
-    }
-
-    // ensure orders have payment_status and valid delivery fields
-    if (!parsed.orders || !Array.isArray(parsed.orders)) {
-      parsed.orders = INITIAL_ORDERS;
-      modified = true;
-    } else {
-      parsed.orders = parsed.orders.map((o) => ({
-        ...o,
-        payment_status: o.payment_status || (o.payment_method === "Prepaid" ? "Paid" : "Pending"),
-        status: o.status || "Pending",
-        tracking_number: o.tracking_number || "",
-        courier_partner: o.courier_partner || "Delhivery Surface",
-      }));
-    }
-
-    if (modified) {
-      try {
-        fs.writeFileSync(STORE_FILE, JSON.stringify(parsed, null, 2), "utf-8");
-      } catch {
-        // Read-only serverless filesystem
-      }
-    }
-
-    return parsed as LocalStore;
-  } catch {
-    const bundled = bundledStoreJson as unknown as LocalStore;
-    if (bundled && bundled.products && bundled.products.length > 0) {
-      return bundled;
-    }
-    return {
-      categories: INITIAL_CATEGORIES,
-      products: INITIAL_PRODUCTS,
-      orders: INITIAL_ORDERS,
-      admin_users: INITIAL_ADMIN_USERS,
-    };
   }
+
+  let ingredients = p.ingredients_list || [];
+  if (typeof ingredients === "string") {
+    try {
+      ingredients = JSON.parse(ingredients);
+    } catch {
+      ingredients = [];
+    }
+  }
+
+  let images = Array.isArray(p.images) ? p.images : [];
+  if (images.length === 0 && p.image_url) {
+    images = [p.image_url];
+  }
+
+  return {
+    id: String(p.id),
+    name: String(p.name || ""),
+    slug: p.slug ? String(p.slug) : slugify(p.name || ""),
+    tagline: p.tagline || "",
+    sku: p.sku || `LEA-${String(p.id).toUpperCase()}`,
+    description: p.description || "",
+    description_sections: descSections,
+    description_images: Array.isArray(p.description_images) ? p.description_images : [],
+    images,
+    highlights: Array.isArray(p.highlights) ? p.highlights : [],
+    dosage: p.dosage || "",
+    ingredients_list: ingredients,
+    price,
+    original_price: originalPrice,
+    save_amount: saveAmount,
+    discount_percent: discountPercent,
+    image_url: p.image_url || images[0] || "",
+    badge: p.badge || "",
+    is_featured: p.is_featured !== undefined ? Boolean(p.is_featured) : true,
+    in_stock: p.in_stock !== undefined ? Boolean(p.in_stock) : true,
+    stock_quantity: p.stock_quantity !== undefined ? Number(p.stock_quantity) : 100,
+    category: p.category || "Men's Vitality & Stamina",
+    category_id: p.category_id || undefined,
+    created_at: p.created_at || new Date().toISOString(),
+  };
 }
 
-function saveStore(data: LocalStore) {
-  try {
-    if (!fs.existsSync(DATA_DIR)) {
-      try {
-        fs.mkdirSync(DATA_DIR, { recursive: true });
-      } catch {
-        // Read-only serverless filesystem
-      }
-    }
-    fs.writeFileSync(STORE_FILE, JSON.stringify(data, null, 2), "utf-8");
-  } catch (err) {
-    // Normal in serverless environments like Vercel with read-only root
-    console.warn("Local storage write skipped in read-only environment:", err);
-  }
+// Helper: Normalize category record
+function normalizeCategory(c: any): Category {
+  return {
+    id: String(c.id),
+    name: String(c.name || ""),
+    slug: c.slug ? String(c.slug) : slugify(c.name || ""),
+    description: c.description || "",
+    image_url: c.image_url || "",
+    created_at: c.created_at || new Date().toISOString(),
+  };
+}
+
+// Helper: Normalize order record
+function normalizeOrder(o: any): Order {
+  return {
+    id: String(o.id),
+    order_number: String(o.order_number),
+    customer_name: String(o.customer_name || ""),
+    customer_phone: String(o.customer_phone || ""),
+    customer_email: o.customer_email || "",
+    address: String(o.address || ""),
+    city: String(o.city || ""),
+    state: String(o.state || ""),
+    pincode: String(o.pincode || ""),
+    product_id: String(o.product_id || ""),
+    product_name: String(o.product_name || ""),
+    quantity: Number(o.quantity || 1),
+    total_amount: Number(o.total_amount || 0),
+    discount_amount: Number(o.discount_amount || 0),
+    payment_method: o.payment_method === "Prepaid" ? "Prepaid" : "COD",
+    payment_status: (o.payment_status || (o.payment_method === "Prepaid" ? "Paid" : "Pending")) as PaymentStatus,
+    status: (o.status || "Pending") as OrderStatus,
+    tracking_number: o.tracking_number || "",
+    courier_partner: o.courier_partner || "Delhivery Surface",
+    estimated_delivery: o.estimated_delivery || "",
+    notes: o.notes || "",
+    created_at: o.created_at || new Date().toISOString(),
+  };
 }
 
 /* =========================================================
-   0. AUTOMATED SUPABASE SYNC & RESEED API
+   0. IDEMPOTENT SUPABASE MIGRATION & RE-SEED API
 ========================================================= */
 
 export async function syncLeaforaToSupabase(): Promise<{
@@ -616,7 +176,8 @@ export async function syncLeaforaToSupabase(): Promise<{
   message: string;
   count: number;
 }> {
-  if (!isSupabaseConfigured() || !supabase) {
+  const client = getSupabaseServerClient();
+  if (!client) {
     return {
       success: false,
       message: "Supabase credentials are not configured in environment variables",
@@ -625,74 +186,119 @@ export async function syncLeaforaToSupabase(): Promise<{
   }
 
   try {
-    // 1. Remove legacy height veda records if present
-    try {
-      await supabase
-        .from("products")
-        .delete()
-        .or("id.eq.prod-1,id.eq.prod-2,id.eq.prod-3,id.eq.prod-4,sku.ilike.HV-%");
-      await supabase
-        .from("categories")
-        .delete()
-        .or("id.eq.cat-1,id.eq.cat-2,id.eq.cat-3,id.eq.cat-4,slug.eq.full-kit");
-    } catch {
-      // Non-fatal if delete fails
-    }
-
-    // 2. Upsert categories
+    // 1. Upsert Categories
     for (const cat of INITIAL_CATEGORIES) {
-      await supabase.from("categories").upsert({
-        id: cat.id,
-        name: cat.name,
-        slug: cat.slug,
-        description: cat.description,
-        image_url: cat.image_url,
-      });
+      const { error: catErr } = await client.from("categories").upsert(
+        {
+          id: cat.id,
+          name: cat.name,
+          slug: cat.slug,
+          description: cat.description || "",
+          image_url: cat.image_url || "",
+          created_at: cat.created_at || new Date().toISOString(),
+        },
+        { onConflict: "id" }
+      );
+      if (catErr) {
+        console.error("Failed to migrate category to Supabase:", cat.id, catErr);
+        throw new Error(`Category migration failed (${cat.id}): ${catErr.message}`);
+      }
     }
 
-    // 3. Upsert products
+    // 2. Upsert Products
     for (const prod of INITIAL_PRODUCTS) {
-      await supabase.from("products").upsert({
-        id: prod.id,
-        name: prod.name,
-        slug: prod.slug,
-        tagline: prod.tagline,
-        sku: prod.sku,
-        description: prod.description,
-        description_sections: prod.description_sections || [],
-        description_images: prod.description_images || [],
-        images: prod.images || [prod.image_url],
-        highlights: prod.highlights || [],
-        dosage: prod.dosage || "",
-        ingredients_list: prod.ingredients_list || [],
-        price: prod.price,
-        original_price: prod.original_price,
-        save_amount: prod.save_amount,
-        discount_percent: prod.discount_percent,
-        image_url: prod.image_url,
-        badge: prod.badge || "",
-        is_featured: prod.is_featured ?? true,
-        in_stock: prod.in_stock ?? true,
-        stock_quantity: prod.stock_quantity ?? 100,
-        category: prod.category,
-        category_id: prod.category_id,
-      });
+      const normalized = normalizeProduct(prod);
+      const { error: prodErr } = await client.from("products").upsert(
+        {
+          id: normalized.id,
+          name: normalized.name,
+          slug: normalized.slug,
+          tagline: normalized.tagline,
+          sku: normalized.sku,
+          description: normalized.description,
+          description_sections: normalized.description_sections,
+          description_images: normalized.description_images,
+          images: normalized.images,
+          highlights: normalized.highlights,
+          dosage: normalized.dosage,
+          ingredients_list: normalized.ingredients_list,
+          price: normalized.price,
+          original_price: normalized.original_price,
+          save_amount: normalized.save_amount,
+          discount_percent: normalized.discount_percent,
+          image_url: normalized.image_url,
+          badge: normalized.badge,
+          is_featured: normalized.is_featured,
+          in_stock: normalized.in_stock,
+          stock_quantity: normalized.stock_quantity,
+          category: normalized.category,
+          category_id: normalized.category_id,
+          created_at: normalized.created_at,
+        },
+        { onConflict: "id" }
+      );
+      if (prodErr) {
+        console.error("Failed to migrate product to Supabase:", prod.id, prodErr);
+        throw new Error(`Product migration failed (${prod.id}): ${prodErr.message}`);
+      }
+    }
+
+    // 3. Upsert Orders
+    for (const order of INITIAL_ORDERS) {
+      const normalizedOrd = normalizeOrder(order);
+      const { error: ordErr } = await client.from("orders").upsert(
+        {
+          id: normalizedOrd.id,
+          order_number: normalizedOrd.order_number,
+          customer_name: normalizedOrd.customer_name,
+          customer_phone: normalizedOrd.customer_phone,
+          customer_email: normalizedOrd.customer_email,
+          address: normalizedOrd.address,
+          city: normalizedOrd.city,
+          state: normalizedOrd.state,
+          pincode: normalizedOrd.pincode,
+          product_id: normalizedOrd.product_id,
+          product_name: normalizedOrd.product_name,
+          quantity: normalizedOrd.quantity,
+          total_amount: normalizedOrd.total_amount,
+          discount_amount: normalizedOrd.discount_amount,
+          payment_method: normalizedOrd.payment_method,
+          payment_status: normalizedOrd.payment_status,
+          status: normalizedOrd.status,
+          tracking_number: normalizedOrd.tracking_number,
+          courier_partner: normalizedOrd.courier_partner,
+          estimated_delivery: normalizedOrd.estimated_delivery,
+          notes: normalizedOrd.notes,
+          created_at: normalizedOrd.created_at,
+        },
+        { onConflict: "id" }
+      );
+      if (ordErr) {
+        console.warn("Notice: order upsert skipped or failed:", order.id, ordErr.message);
+      }
     }
 
     // 4. Upsert Admin User
     for (const user of INITIAL_ADMIN_USERS) {
-      await supabase.from("admin_users").upsert({
-        id: user.id,
-        username: user.username,
-        password_hash: user.password_hash,
-        name: user.name,
-        role: user.role,
-      });
+      const { error: userErr } = await client.from("admin_users").upsert(
+        {
+          id: user.id,
+          username: user.username,
+          password_hash: user.password_hash,
+          name: user.name,
+          role: user.role,
+          created_at: user.created_at || new Date().toISOString(),
+        },
+        { onConflict: "id" }
+      );
+      if (userErr) {
+        console.error("Failed to migrate admin user to Supabase:", user.username, userErr);
+      }
     }
 
     return {
       success: true,
-      message: "Synced all 4 Leafora Herbal products and categories to Supabase Live!",
+      message: `Successfully migrated ${INITIAL_CATEGORIES.length} categories and ${INITIAL_PRODUCTS.length} products to Supabase PostgreSQL`,
       count: INITIAL_PRODUCTS.length,
     };
   } catch (err: any) {
@@ -710,51 +316,51 @@ export async function syncLeaforaToSupabase(): Promise<{
 ========================================================= */
 
 export async function getCategories(): Promise<Category[]> {
-  const store = ensureStore();
+  const client = getSupabaseServerClient();
 
-  if (isSupabaseConfigured() && supabase) {
+  if (client) {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await client
         .from("categories")
         .select("*")
         .order("created_at", { ascending: true });
 
-      if (!error && data && data.length > 0) {
-        // Detect legacy Height Veda categories
-        const isOldData = data.some(
-          (c: any) =>
-            c.id === "cat-1" ||
-            c.slug === "full-kit" ||
-            c.name?.toLowerCase().includes("full kit") ||
-            (c.image_url && c.image_url.includes("heightveda"))
-        );
+      if (error) {
+        console.error("Supabase getCategories query error:", error);
+        throw new Error(`Failed to fetch categories from database: ${error.message}`);
+      }
 
-        if (isOldData) {
-          syncLeaforaToSupabase().catch(() => {});
-          return INITIAL_CATEGORIES.map((c) => ({
-            ...c,
-            product_count: store.products.filter(
-              (p) => p.category === c.name || p.category_id === c.id
-            ).length,
-          }));
-        }
-
-        return data.map((c) => ({
+      if (data && data.length > 0) {
+        const categories = data.map(normalizeCategory);
+        // Calculate dynamic product counts
+        const products = await getProducts();
+        return categories.map((c) => ({
           ...c,
-          product_count: store.products.filter(
+          product_count: products.filter(
             (p) => p.category === c.name || p.category_id === c.id
           ).length,
-        })) as Category[];
+        }));
       }
-    } catch (e) {
-      console.warn("Supabase categories fetch failed:", e);
+
+      // If categories table is completely empty, trigger initial seed
+      console.log("Categories table empty in Supabase, triggering initial seed...");
+      await syncLeaforaToSupabase();
+      return INITIAL_CATEGORIES.map((c) => ({
+        ...c,
+        product_count: INITIAL_PRODUCTS.filter(
+          (p) => p.category === c.name || p.category_id === c.id
+        ).length,
+      }));
+    } catch (e: any) {
+      console.error("Supabase categories error, falling back to memory store:", e?.message);
     }
   }
 
-  // Calculate live product counts for each category
-  return store.categories.map((c) => ({
+  // Fallback to safe memory store
+  const prods = memoryStore.products;
+  return memoryStore.categories.map((c) => ({
     ...c,
-    product_count: store.products.filter((p) => p.category === c.name || p.category_id === c.id).length,
+    product_count: prods.filter((p) => p.category === c.name || p.category_id === c.id).length,
   }));
 }
 
@@ -766,33 +372,40 @@ export async function getCategoryById(id: string): Promise<Category | null> {
 export async function createCategory(
   categoryData: Omit<Category, "id" | "created_at">
 ): Promise<Category> {
-  const slug = categoryData.slug || categoryData.name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+  const slug = categoryData.slug ? slugify(categoryData.slug) : slugify(categoryData.name);
   const newCategory: Category = {
     ...categoryData,
     slug,
-    id: `cat-${Date.now()}`,
+    id: `cat-${slug || Date.now()}`,
     created_at: new Date().toISOString(),
   };
 
-  if (isSupabaseConfigured() && supabase) {
-    try {
-      const { data, error } = await supabase
-        .from("categories")
-        .insert([newCategory])
-        .select()
-        .single();
+  const client = getSupabaseServerClient();
+  if (client) {
+    const { data, error } = await client
+      .from("categories")
+      .insert([
+        {
+          id: newCategory.id,
+          name: newCategory.name,
+          slug: newCategory.slug,
+          description: newCategory.description || "",
+          image_url: newCategory.image_url || "",
+          created_at: newCategory.created_at,
+        },
+      ])
+      .select()
+      .single();
 
-      if (!error && data) {
-        return data as Category;
-      }
-    } catch (e) {
-      console.warn("Supabase category insert failed:", e);
+    if (error) {
+      console.error("Supabase category insert failed:", error);
+      throw new Error(`Failed to create category in database: ${error.message}`);
     }
+
+    return normalizeCategory(data);
   }
 
-  const store = ensureStore();
-  store.categories.push(newCategory);
-  saveStore(store);
+  memoryStore.categories.push(newCategory);
   return newCategory;
 }
 
@@ -800,50 +413,53 @@ export async function updateCategory(
   id: string,
   updates: Partial<Category>
 ): Promise<Category | null> {
-  if (isSupabaseConfigured() && supabase) {
-    try {
-      const { data, error } = await supabase
-        .from("categories")
-        .update(updates)
-        .eq("id", id)
-        .select()
-        .single();
+  const client = getSupabaseServerClient();
+  if (client) {
+    const updatePayload: Record<string, unknown> = {};
+    if (updates.name !== undefined) updatePayload.name = updates.name.trim();
+    if (updates.slug !== undefined) updatePayload.slug = slugify(updates.slug);
+    if (updates.description !== undefined) updatePayload.description = updates.description;
+    if (updates.image_url !== undefined) updatePayload.image_url = updates.image_url;
 
-      if (!error && data) {
-        return data as Category;
-      }
-    } catch (e) {
-      console.warn("Supabase category update failed:", e);
+    const { data, error } = await client
+      .from("categories")
+      .update(updatePayload)
+      .eq("id", id)
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Supabase category update failed:", error);
+      throw new Error(`Failed to update category in database: ${error.message}`);
     }
+
+    return normalizeCategory(data);
   }
 
-  const store = ensureStore();
-  const idx = store.categories.findIndex((c) => c.id === id);
+  const idx = memoryStore.categories.findIndex((c) => c.id === id);
   if (idx === -1) return null;
 
-  store.categories[idx] = {
-    ...store.categories[idx],
+  memoryStore.categories[idx] = {
+    ...memoryStore.categories[idx],
     ...updates,
   };
-  saveStore(store);
-  return store.categories[idx];
+  return memoryStore.categories[idx];
 }
 
 export async function deleteCategory(id: string): Promise<boolean> {
-  if (isSupabaseConfigured() && supabase) {
-    try {
-      const { error } = await supabase.from("categories").delete().eq("id", id);
-      if (!error) return true;
-    } catch (e) {
-      console.warn("Supabase category delete failed:", e);
+  const client = getSupabaseServerClient();
+  if (client) {
+    const { error } = await client.from("categories").delete().eq("id", id);
+    if (error) {
+      console.error("Supabase category delete failed:", error);
+      throw new Error(`Failed to delete category from database: ${error.message}`);
     }
+    return true;
   }
 
-  const store = ensureStore();
-  const initLen = store.categories.length;
-  store.categories = store.categories.filter((c) => c.id !== id);
-  saveStore(store);
-  return store.categories.length < initLen;
+  const initLen = memoryStore.categories.length;
+  memoryStore.categories = memoryStore.categories.filter((c) => c.id !== id);
+  return memoryStore.categories.length < initLen;
 }
 
 /* =========================================================
@@ -859,12 +475,11 @@ export interface GetProductsOptions {
 }
 
 export async function getProducts(options: GetProductsOptions = {}): Promise<Product[]> {
-  const store = ensureStore();
-  let list = store.products;
+  const client = getSupabaseServerClient();
 
-  if (isSupabaseConfigured() && supabase) {
+  if (client) {
     try {
-      let query = supabase.from("products").select("*").order("created_at", { ascending: false });
+      let query = client.from("products").select("*").order("created_at", { ascending: false });
 
       if (options.category && options.category !== "All") {
         query = query.eq("category", options.category);
@@ -877,29 +492,43 @@ export async function getProducts(options: GetProductsOptions = {}): Promise<Pro
       }
 
       const { data, error } = await query;
-      if (!error && data && data.length > 0) {
-        // Detect legacy Height Veda products
-        const isOldData = data.some(
-          (p: any) =>
-            p.id === "prod-1" ||
-            p.sku?.startsWith("HV-") ||
-            p.name?.toLowerCase().includes("height") ||
-            (p.image_url && p.image_url.includes("heightveda"))
-        );
-
-        if (isOldData) {
-          syncLeaforaToSupabase().catch(() => {});
-          list = INITIAL_PRODUCTS;
-        } else {
-          list = data as Product[];
-        }
+      if (error) {
+        console.error("Supabase products fetch failed:", error);
+        throw new Error(`Failed to fetch products: ${error.message}`);
       }
-    } catch (e) {
-      console.warn("Supabase products fetch failed:", e);
+
+      if (data && data.length > 0) {
+        let list = data.map(normalizeProduct);
+
+        if (options.search) {
+          const q = options.search.toLowerCase();
+          list = list.filter(
+            (p) =>
+              p.name.toLowerCase().includes(q) ||
+              (p.sku && p.sku.toLowerCase().includes(q)) ||
+              (p.category && p.category.toLowerCase().includes(q)) ||
+              (p.tagline && p.tagline.toLowerCase().includes(q))
+          );
+        }
+
+        if (options.offset !== undefined && options.limit !== undefined) {
+          return list.slice(options.offset, options.offset + options.limit);
+        }
+        return list;
+      }
+
+      // If table is completely empty in Supabase, auto-seed
+      console.log("Products table empty in Supabase, triggering initial seed...");
+      await syncLeaforaToSupabase();
+      return INITIAL_PRODUCTS.map(normalizeProduct);
+    } catch (e: any) {
+      console.error("Supabase products query error, falling back to memory store:", e?.message);
     }
   }
 
-  // Filter in memory for maximum search coverage (search name, sku, category, tagline)
+  // Fallback to memory store
+  let list = memoryStore.products.map(normalizeProduct);
+
   if (options.search) {
     const q = options.search.toLowerCase();
     list = list.filter(
@@ -927,72 +556,80 @@ export async function getProducts(options: GetProductsOptions = {}): Promise<Pro
 }
 
 export async function getProductById(id: string): Promise<Product | null> {
-  if (isSupabaseConfigured() && supabase) {
+  const client = getSupabaseServerClient();
+  if (client) {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await client
         .from("products")
         .select("*")
         .eq("id", id)
-        .single();
+        .maybeSingle();
 
       if (!error && data) {
-        return data as Product;
+        return normalizeProduct(data);
       }
     } catch (e) {
       console.warn("Supabase product fetch failed:", e);
     }
   }
 
-  const store = ensureStore();
-  return store.products.find((p) => p.id === id) || null;
+  const found = memoryStore.products.find((p) => p.id === id);
+  return found ? normalizeProduct(found) : null;
 }
 
 export async function getProductBySlug(slugOrId: string): Promise<Product | null> {
-  const store = ensureStore();
   const normalized = decodeURIComponent(slugOrId).toLowerCase().trim();
+  const client = getSupabaseServerClient();
 
-  // 1. Direct ID match
-  const byId = store.products.find((p) => p.id.toLowerCase() === normalized);
-  if (byId) return byId;
-
-  // 2. Direct slug match
-  const bySlug = store.products.find(
-    (p) => p.slug && p.slug.toLowerCase() === normalized
-  );
-  if (bySlug) return bySlug;
-
-  // 3. Slugified name match
-  const bySlugName = store.products.find(
-    (p) => slugify(p.name) === normalized
-  );
-  if (bySlugName) return bySlugName;
-
-  // 4. Exact lowercase name match
-  const byName = store.products.find(
-    (p) => p.name.toLowerCase() === normalized
-  );
-  if (byName) return byName;
-
-  // 5. Partial / fuzzy match
-  const byFuzzy = store.products.find((p) => {
-    const s = slugify(p.name);
-    return s.includes(normalized) || normalized.includes(s);
-  });
-  if (byFuzzy) return byFuzzy;
-
-  if (isSupabaseConfigured() && supabase) {
+  if (client) {
     try {
-      const { data } = await supabase
+      // 1. Direct match on slug or id
+      const { data, error } = await client
         .from("products")
         .select("*")
         .or(`slug.eq.${normalized},id.eq.${normalized}`)
         .limit(1)
         .maybeSingle();
-      if (data) return data as Product;
+
+      if (!error && data) {
+        return normalizeProduct(data);
+      }
+
+      // 2. Fuzzy match on product name
+      const { data: nameMatch } = await client
+        .from("products")
+        .select("*")
+        .ilike("name", `%${normalized.replace(/-/g, " ")}%`)
+        .limit(1)
+        .maybeSingle();
+
+      if (nameMatch) {
+        return normalizeProduct(nameMatch);
+      }
     } catch (e) {
       console.warn("Supabase getProductBySlug failed:", e);
     }
   }
+
+  // Fallback to memory store search
+  const byId = memoryStore.products.find((p) => p.id.toLowerCase() === normalized);
+  if (byId) return normalizeProduct(byId);
+
+  const bySlug = memoryStore.products.find(
+    (p) => p.slug && p.slug.toLowerCase() === normalized
+  );
+  if (bySlug) return normalizeProduct(bySlug);
+
+  const bySlugName = memoryStore.products.find(
+    (p) => slugify(p.name) === normalized
+  );
+  if (bySlugName) return normalizeProduct(bySlugName);
+
+  const byFuzzy = memoryStore.products.find((p) => {
+    const s = slugify(p.name);
+    return s.includes(normalized) || normalized.includes(s);
+  });
+  if (byFuzzy) return normalizeProduct(byFuzzy);
 
   return null;
 }
@@ -1000,23 +637,28 @@ export async function getProductBySlug(slugOrId: string): Promise<Product | null
 export async function createProduct(
   productData: Omit<Product, "id" | "created_at">
 ): Promise<Product> {
-  const saveAmount = Math.max(0, productData.original_price - productData.price);
+  const price = Number(productData.price);
+  const originalPrice = Number(productData.original_price || productData.price);
+  const saveAmount = Math.max(0, originalPrice - price);
   const discountPercent =
-    productData.original_price > 0
-      ? Math.round((saveAmount / productData.original_price) * 100)
-      : 0;
-
+    originalPrice > 0 ? Math.round((saveAmount / originalPrice) * 100) : 0;
   const slug = productData.slug ? slugify(productData.slug) : slugify(productData.name);
 
   const newProduct: Product = {
     ...productData,
     id: `prod-${Date.now()}`,
     slug,
-    sku: productData.sku || `HV-SKU-${Math.floor(1000 + Math.random() * 9000)}`,
+    sku: productData.sku || `LEA-${Math.floor(1000 + Math.random() * 9000)}`,
+    price,
+    original_price: originalPrice,
     save_amount: saveAmount,
     discount_percent: discountPercent,
-    stock_quantity: productData.stock_quantity ?? 100,
-    images: productData.images && productData.images.length > 0 ? productData.images : [productData.image_url],
+    stock_quantity: productData.stock_quantity !== undefined ? Number(productData.stock_quantity) : 100,
+    in_stock: productData.in_stock !== undefined ? Boolean(productData.in_stock) : true,
+    images:
+      productData.images && productData.images.length > 0
+        ? productData.images
+        : [productData.image_url],
     description_sections: productData.description_sections || [],
     description_images: productData.description_images || [],
     highlights: productData.highlights || [],
@@ -1024,25 +666,50 @@ export async function createProduct(
     created_at: new Date().toISOString(),
   };
 
-  if (isSupabaseConfigured() && supabase) {
-    try {
-      const { data, error } = await supabase
-        .from("products")
-        .insert([newProduct])
-        .select()
-        .single();
+  const client = getSupabaseServerClient();
+  if (client) {
+    const { data, error } = await client
+      .from("products")
+      .insert([
+        {
+          id: newProduct.id,
+          name: newProduct.name,
+          slug: newProduct.slug,
+          tagline: newProduct.tagline,
+          sku: newProduct.sku,
+          description: newProduct.description,
+          description_sections: newProduct.description_sections,
+          description_images: newProduct.description_images,
+          images: newProduct.images,
+          highlights: newProduct.highlights,
+          dosage: newProduct.dosage,
+          ingredients_list: newProduct.ingredients_list,
+          price: newProduct.price,
+          original_price: newProduct.original_price,
+          save_amount: newProduct.save_amount,
+          discount_percent: newProduct.discount_percent,
+          image_url: newProduct.image_url,
+          badge: newProduct.badge,
+          is_featured: newProduct.is_featured,
+          in_stock: newProduct.in_stock,
+          stock_quantity: newProduct.stock_quantity,
+          category: newProduct.category,
+          category_id: newProduct.category_id,
+          created_at: newProduct.created_at,
+        },
+      ])
+      .select()
+      .single();
 
-      if (!error && data) {
-        return data as Product;
-      }
-    } catch (e) {
-      console.warn("Supabase product insert failed:", e);
+    if (error) {
+      console.error("Supabase product insert failed:", error);
+      throw new Error(`Failed to save product in database: ${error.message}`);
     }
+
+    return normalizeProduct(data);
   }
 
-  const store = ensureStore();
-  store.products.unshift(newProduct);
-  saveStore(store);
+  memoryStore.products.unshift(newProduct);
   return newProduct;
 }
 
@@ -1050,14 +717,84 @@ export async function updateProduct(
   id: string,
   updates: Partial<Product>
 ): Promise<Product | null> {
-  const store = ensureStore();
-  const index = store.products.findIndex((p) => p.id === id);
+  const client = getSupabaseServerClient();
+
+  if (client) {
+    const existing = await getProductById(id);
+    if (!existing) {
+      console.error(`Product with ID "${id}" does not exist in database`);
+      return null;
+    }
+
+    const finalPrice = updates.price !== undefined ? Number(updates.price) : existing.price;
+    const finalOriginal =
+      updates.original_price !== undefined
+        ? Number(updates.original_price)
+        : existing.original_price;
+    const saveAmount = Math.max(0, finalOriginal - finalPrice);
+    const discountPercent =
+      finalOriginal > 0 ? Math.round((saveAmount / finalOriginal) * 100) : 0;
+
+    const finalSlug = updates.slug
+      ? slugify(updates.slug)
+      : updates.name
+      ? slugify(updates.name)
+      : existing.slug || slugify(existing.name);
+
+    const payload: Record<string, unknown> = {
+      ...updates,
+      slug: finalSlug,
+      price: finalPrice,
+      original_price: finalOriginal,
+      save_amount: saveAmount,
+      discount_percent: discountPercent,
+    };
+
+    if (updates.stock_quantity !== undefined) {
+      payload.stock_quantity = Number(updates.stock_quantity);
+    }
+    if (updates.in_stock !== undefined) {
+      payload.in_stock = Boolean(updates.in_stock);
+    }
+    if (updates.images !== undefined) {
+      payload.images = Array.isArray(updates.images)
+        ? updates.images
+        : [updates.image_url || existing.image_url];
+    }
+    if (updates.description_sections !== undefined) {
+      payload.description_sections = updates.description_sections;
+    }
+    if (updates.ingredients_list !== undefined) {
+      payload.ingredients_list = updates.ingredients_list;
+    }
+    if (updates.highlights !== undefined) {
+      payload.highlights = updates.highlights;
+    }
+
+    const { data, error } = await client
+      .from("products")
+      .update(payload)
+      .eq("id", id)
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Supabase product update failed:", error);
+      throw new Error(`Failed to update product in database: ${error.message}`);
+    }
+
+    return normalizeProduct(data);
+  }
+
+  const index = memoryStore.products.findIndex((p) => p.id === id);
   if (index === -1) return null;
 
-  const current = store.products[index];
+  const current = memoryStore.products[index];
   const finalPrice = updates.price !== undefined ? Number(updates.price) : current.price;
   const finalOriginal =
-    updates.original_price !== undefined ? Number(updates.original_price) : current.original_price;
+    updates.original_price !== undefined
+      ? Number(updates.original_price)
+      : current.original_price;
   const saveAmount = Math.max(0, finalOriginal - finalPrice);
   const discountPercent =
     finalOriginal > 0 ? Math.round((saveAmount / finalOriginal) * 100) : 0;
@@ -1068,56 +805,37 @@ export async function updateProduct(
     ? slugify(updates.name)
     : current.slug || slugify(current.name);
 
-  const finalUpdates: Partial<Product> = {
+  memoryStore.products[index] = {
+    ...current,
     ...updates,
     slug: finalSlug,
     price: finalPrice,
     original_price: finalOriginal,
     save_amount: saveAmount,
     discount_percent: discountPercent,
-    stock_quantity: updates.stock_quantity !== undefined ? Number(updates.stock_quantity) : current.stock_quantity,
+    stock_quantity:
+      updates.stock_quantity !== undefined
+        ? Number(updates.stock_quantity)
+        : current.stock_quantity,
   };
 
-  if (isSupabaseConfigured() && supabase) {
-    try {
-      const { data, error } = await supabase
-        .from("products")
-        .update(finalUpdates)
-        .eq("id", id)
-        .select()
-        .single();
-
-      if (!error && data) {
-        return data as Product;
-      }
-    } catch (e) {
-      console.warn("Supabase product update failed:", e);
-    }
-  }
-
-  store.products[index] = {
-    ...current,
-    ...finalUpdates,
-  };
-  saveStore(store);
-  return store.products[index];
+  return memoryStore.products[index];
 }
 
 export async function deleteProduct(id: string): Promise<boolean> {
-  if (isSupabaseConfigured() && supabase) {
-    try {
-      const { error } = await supabase.from("products").delete().eq("id", id);
-      if (!error) return true;
-    } catch (e) {
-      console.warn("Supabase product delete failed:", e);
+  const client = getSupabaseServerClient();
+  if (client) {
+    const { error } = await client.from("products").delete().eq("id", id);
+    if (error) {
+      console.error("Supabase product delete failed:", error);
+      throw new Error(`Failed to delete product from database: ${error.message}`);
     }
+    return true;
   }
 
-  const store = ensureStore();
-  const initialLen = store.products.length;
-  store.products = store.products.filter((p) => p.id !== id);
-  saveStore(store);
-  return store.products.length < initialLen;
+  const initialLen = memoryStore.products.length;
+  memoryStore.products = memoryStore.products.filter((p) => p.id !== id);
+  return memoryStore.products.length < initialLen;
 }
 
 /* =========================================================
@@ -1133,37 +851,45 @@ export interface GetOrdersOptions {
 }
 
 export async function getOrders(options: GetOrdersOptions | string = {}): Promise<Order[]> {
-  const store = ensureStore();
-  let ordersList = store.orders;
-
   const statusFilter = typeof options === "string" ? options : options.status;
   const searchQuery = typeof options === "object" ? options.search : undefined;
 
-  if (isSupabaseConfigured() && supabase) {
+  const client = getSupabaseServerClient();
+  if (client) {
     try {
-      let query = supabase.from("orders").select("*").order("created_at", { ascending: false });
+      let query = client.from("orders").select("*").order("created_at", { ascending: false });
 
       if (statusFilter && statusFilter !== "All") {
         query = query.eq("status", statusFilter);
       }
 
       const { data, error } = await query;
-      if (!error && data && data.length > 0) {
-        const isOldOrders = data.some(
-          (o: any) =>
-            o.order_number?.startsWith("HV-") ||
-            o.product_name?.toLowerCase().includes("height")
-        );
-        if (isOldOrders) {
-          ordersList = store.orders;
-        } else {
-          ordersList = data as Order[];
-        }
+      if (error) {
+        console.error("Supabase orders fetch error:", error);
+        throw new Error(`Failed to fetch orders: ${error.message}`);
       }
-    } catch (e) {
-      console.warn("Supabase orders fetch failed:", e);
+
+      if (data && data.length > 0) {
+        let ordersList = data.map(normalizeOrder);
+        if (searchQuery) {
+          const q = searchQuery.toLowerCase();
+          ordersList = ordersList.filter(
+            (o) =>
+              o.order_number.toLowerCase().includes(q) ||
+              o.customer_name.toLowerCase().includes(q) ||
+              o.customer_phone.includes(q) ||
+              o.city.toLowerCase().includes(q) ||
+              o.product_name.toLowerCase().includes(q)
+          );
+        }
+        return ordersList;
+      }
+    } catch (e: any) {
+      console.warn("Supabase orders fetch failed, falling back to memory store:", e?.message);
     }
   }
+
+  let ordersList = memoryStore.orders.map(normalizeOrder);
 
   if (statusFilter && statusFilter !== "All") {
     ordersList = ordersList.filter((o) => o.status === statusFilter);
@@ -1185,8 +911,25 @@ export async function getOrders(options: GetOrdersOptions | string = {}): Promis
 }
 
 export async function getOrderById(id: string): Promise<Order | null> {
-  const orders = await getOrders();
-  return orders.find((o) => o.id === id || o.order_number === id) || null;
+  const client = getSupabaseServerClient();
+  if (client) {
+    try {
+      const { data, error } = await client
+        .from("orders")
+        .select("*")
+        .or(`id.eq.${id},order_number.eq.${id}`)
+        .maybeSingle();
+
+      if (!error && data) {
+        return normalizeOrder(data);
+      }
+    } catch (e) {
+      console.warn("Supabase order fetch failed:", e);
+    }
+  }
+
+  const found = memoryStore.orders.find((o) => o.id === id || o.order_number === id);
+  return found ? normalizeOrder(found) : null;
 }
 
 export async function createOrder(
@@ -1196,14 +939,15 @@ export async function createOrder(
     ...orderData,
     id: `ord-${Date.now()}`,
     order_number: `LEA-${Math.floor(10000 + Math.random() * 90000)}`,
-    payment_status: orderData.payment_status || (orderData.payment_method === "Prepaid" ? "Paid" : "Pending"),
+    payment_status:
+      orderData.payment_status || (orderData.payment_method === "Prepaid" ? "Paid" : "Pending"),
     status: orderData.status || "Pending",
     courier_partner: orderData.courier_partner || "Delhivery Surface",
     tracking_number: orderData.tracking_number || "",
     created_at: new Date().toISOString(),
   };
 
-  // Decrement inventory stock on product
+  // Decrement product inventory
   if (orderData.product_id) {
     try {
       const product = await getProductById(orderData.product_id);
@@ -1215,29 +959,52 @@ export async function createOrder(
         });
       }
     } catch (err) {
-      console.warn("Failed to update product stock on order:", err);
+      console.warn("Inventory decrement notice:", err);
     }
   }
 
-  if (isSupabaseConfigured() && supabase) {
-    try {
-      const { data, error } = await supabase
-        .from("orders")
-        .insert([newOrder])
-        .select()
-        .single();
+  const client = getSupabaseServerClient();
+  if (client) {
+    const { data, error } = await client
+      .from("orders")
+      .insert([
+        {
+          id: newOrder.id,
+          order_number: newOrder.order_number,
+          customer_name: newOrder.customer_name,
+          customer_phone: newOrder.customer_phone,
+          customer_email: newOrder.customer_email || "",
+          address: newOrder.address,
+          city: newOrder.city,
+          state: newOrder.state,
+          pincode: newOrder.pincode,
+          product_id: newOrder.product_id,
+          product_name: newOrder.product_name,
+          quantity: newOrder.quantity,
+          total_amount: newOrder.total_amount,
+          discount_amount: newOrder.discount_amount || 0,
+          payment_method: newOrder.payment_method,
+          payment_status: newOrder.payment_status,
+          status: newOrder.status,
+          tracking_number: newOrder.tracking_number,
+          courier_partner: newOrder.courier_partner,
+          estimated_delivery: newOrder.estimated_delivery || "",
+          notes: newOrder.notes || "",
+          created_at: newOrder.created_at,
+        },
+      ])
+      .select()
+      .single();
 
-      if (!error && data) {
-        return data as Order;
-      }
-    } catch (e) {
-      console.warn("Supabase order insert failed:", e);
+    if (error) {
+      console.error("Supabase order insert failed:", error);
+      throw new Error(`Failed to place order in database: ${error.message}`);
     }
+
+    return normalizeOrder(data);
   }
 
-  const store = ensureStore();
-  store.orders.unshift(newOrder);
-  saveStore(store);
+  memoryStore.orders.unshift(newOrder);
   return newOrder;
 }
 
@@ -1251,79 +1018,51 @@ export async function updateOrderStatus(
     payment_status?: PaymentStatus;
   }
 ): Promise<Order | null> {
-  const updates: Partial<Order> = {
+  return updateOrder(id, {
     status,
     ...(tracking || {}),
-  };
-
-  if (isSupabaseConfigured() && supabase) {
-    try {
-      const { data, error } = await supabase
-        .from("orders")
-        .update(updates)
-        .eq("id", id)
-        .select()
-        .single();
-
-      if (!error && data) {
-        return data as Order;
-      }
-    } catch (e) {
-      console.warn("Supabase order update failed:", e);
-    }
-  }
-
-  const store = ensureStore();
-  const order = store.orders.find((o) => o.id === id);
-  if (!order) return null;
-
-  Object.assign(order, updates);
-  saveStore(store);
-  return order;
+  });
 }
 
 export async function updateOrder(id: string, updates: Partial<Order>): Promise<Order | null> {
-  if (isSupabaseConfigured() && supabase) {
-    try {
-      const { data, error } = await supabase
-        .from("orders")
-        .update(updates)
-        .eq("id", id)
-        .select()
-        .single();
+  const client = getSupabaseServerClient();
+  if (client) {
+    const { data, error } = await client
+      .from("orders")
+      .update(updates)
+      .eq("id", id)
+      .select()
+      .single();
 
-      if (!error && data) {
-        return data as Order;
-      }
-    } catch (e) {
-      console.warn("Supabase order update failed:", e);
+    if (error) {
+      console.error("Supabase order update failed:", error);
+      throw new Error(`Failed to update order in database: ${error.message}`);
     }
+
+    return normalizeOrder(data);
   }
 
-  const store = ensureStore();
-  const order = store.orders.find((o) => o.id === id);
+  const order = memoryStore.orders.find((o) => o.id === id);
   if (!order) return null;
 
   Object.assign(order, updates);
-  saveStore(store);
   return order;
 }
 
 export async function deleteOrder(id: string): Promise<boolean> {
-  if (isSupabaseConfigured() && supabase) {
-    try {
-      const { error } = await supabase.from("orders").delete().eq("id", id);
-      if (!error) return true;
-    } catch (e) {
-      console.warn("Supabase order delete failed:", e);
+  const client = getSupabaseServerClient();
+  if (client) {
+    const { error } = await client.from("orders").delete().eq("id", id);
+    if (error) {
+      console.error("Supabase order delete failed:", error);
+      throw new Error(`Failed to delete order from database: ${error.message}`);
     }
+    return true;
   }
 
-  const store = ensureStore();
-  const initialLen = store.orders.length;
-  store.orders = store.orders.filter((o) => o.id !== id);
-  saveStore(store);
-  return store.orders.length < initialLen;
+  const initialLen = memoryStore.orders.length;
+  memoryStore.orders = memoryStore.orders.filter((o) => o.id !== id);
+  return memoryStore.orders.length < initialLen;
 }
 
 /* =========================================================
@@ -1332,8 +1071,6 @@ export async function deleteOrder(id: string): Promise<boolean> {
 
 export async function getCustomers(searchQuery?: string): Promise<Customer[]> {
   const orders = await getOrders();
-
-  // Aggregate orders by phone number (primary unique key for e-commerce)
   const map = new Map<string, Customer>();
 
   for (const order of orders) {
@@ -1367,7 +1104,6 @@ export async function getCustomers(searchQuery?: string): Promise<Customer[]> {
       }
       if (new Date(order.created_at) > new Date(cust.last_order_date || "")) {
         cust.last_order_date = order.created_at;
-        // update latest address
         cust.address = order.address;
         cust.city = order.city;
         cust.state = order.state;
@@ -1378,7 +1114,9 @@ export async function getCustomers(searchQuery?: string): Promise<Customer[]> {
   }
 
   let customers = Array.from(map.values()).sort(
-    (a, b) => new Date(b.last_order_date || "").getTime() - new Date(a.last_order_date || "").getTime()
+    (a, b) =>
+      new Date(b.last_order_date || "").getTime() -
+      new Date(a.last_order_date || "").getTime()
   );
 
   if (searchQuery) {
@@ -1405,22 +1143,29 @@ export async function getCustomerByPhone(phone: string): Promise<Customer | null
 ========================================================= */
 
 export async function getSalesStats(): Promise<SalesStats> {
-  const orders = await getOrders();
-  const products = await getProducts();
-  const customers = await getCustomers();
+  const [orders, products, customers] = await Promise.all([
+    getOrders(),
+    getProducts(),
+    getCustomers(),
+  ]);
 
   const totalOrders = orders.length;
   const totalCustomers = customers.length;
 
   const pendingOrders = orders.filter((o) => o.status === "Pending").length;
-  const processingOrders = orders.filter((o) => o.status === "Processing" || o.status === "Confirmed").length;
-  const shippedOrders = orders.filter((o) => o.status === "Shipped" || o.status === "Out for Delivery").length;
+  const processingOrders = orders.filter(
+    (o) => o.status === "Processing" || o.status === "Confirmed"
+  ).length;
+  const shippedOrders = orders.filter(
+    (o) => o.status === "Shipped" || o.status === "Out for Delivery"
+  ).length;
   const deliveredOrders = orders.filter((o) => o.status === "Delivered").length;
   const cancelledOrders = orders.filter((o) => o.status === "Cancelled").length;
 
   const validOrders = orders.filter((o) => o.status !== "Cancelled");
   const totalRevenue = validOrders.reduce((sum, o) => sum + o.total_amount, 0);
-  const averageOrderValue = validOrders.length > 0 ? Math.round(totalRevenue / validOrders.length) : 0;
+  const averageOrderValue =
+    validOrders.length > 0 ? Math.round(totalRevenue / validOrders.length) : 0;
 
   const totalRefunds = orders
     .filter((o) => o.payment_status === "Refunded")
@@ -1520,33 +1265,44 @@ export async function getSalesStats(): Promise<SalesStats> {
 ========================================================= */
 
 export async function getAdminUsers(): Promise<AdminUser[]> {
-  if (isSupabaseConfigured() && supabase) {
+  const client = getSupabaseServerClient();
+  if (client) {
     try {
-      const { data, error } = await supabase.from("admin_users").select("*");
+      const { data, error } = await client.from("admin_users").select("*");
       if (!error && data && data.length > 0) {
         return data as AdminUser[];
       }
     } catch (e) {
-      console.warn("Supabase admin_users fetch fallback to local store:", e);
+      console.warn("Supabase admin_users fetch fallback:", e);
     }
   }
 
-  try {
-    const store = ensureStore();
-    if (store.admin_users && store.admin_users.length > 0) {
-      return store.admin_users;
-    }
-  } catch (e) {
-    console.warn("Local store admin_users fetch fallback:", e);
-  }
-
-  return INITIAL_ADMIN_USERS;
+  return memoryStore.admin_users || INITIAL_ADMIN_USERS;
 }
 
 export async function getAdminUserByUsername(username: string): Promise<AdminUser | null> {
   if (!username) return null;
-  const users = await getAdminUsers();
-  return users.find((u) => u.username.toLowerCase() === username.trim().toLowerCase()) || null;
+  const cleanUsername = username.trim().toLowerCase();
+
+  const client = getSupabaseServerClient();
+  if (client) {
+    try {
+      const { data, error } = await client
+        .from("admin_users")
+        .select("*")
+        .ilike("username", cleanUsername)
+        .maybeSingle();
+
+      if (!error && data) {
+        return data as AdminUser;
+      }
+    } catch (e) {
+      console.warn("Supabase getAdminUserByUsername fallback:", e);
+    }
+  }
+
+  const users = memoryStore.admin_users || INITIAL_ADMIN_USERS;
+  return users.find((u) => u.username.toLowerCase() === cleanUsername) || null;
 }
 
 export async function verifyAdminCredentials(
@@ -1557,7 +1313,7 @@ export async function verifyAdminCredentials(
   const cleanUsername = username.trim().toLowerCase();
   const cleanPassword = password.trim();
 
-  // 1. Master Admin Passcode fallback (matches ADMIN_PASSCODE env or default)
+  // 1. Master Admin Passcode fallback (environment variable ADMIN_PASSCODE)
   const masterPasscode = (process.env.ADMIN_PASSCODE || "soumya!nSUPA09").trim();
   if (cleanUsername === "admin" && cleanPassword === masterPasscode) {
     try {
@@ -1581,23 +1337,27 @@ export async function verifyAdminCredentials(
 
 export async function updateAdminUserLastLogin(id: string): Promise<void> {
   const now = new Date().toISOString();
+  const client = getSupabaseServerClient();
 
-  if (isSupabaseConfigured() && supabase) {
+  if (client) {
     try {
-      await supabase.from("admin_users").update({ last_login: now }).eq("id", id);
-    } catch {
-      // silent fallback
+      const { error } = await client
+        .from("admin_users")
+        .update({ last_login: now })
+        .eq("id", id);
+      if (error) {
+        console.warn("Supabase updateAdminUserLastLogin warning:", error.message);
+      }
+    } catch (e) {
+      console.warn("Supabase updateAdminUserLastLogin error:", e);
     }
   }
 
-  try {
-    const store = ensureStore();
-    store.admin_users = (store.admin_users || INITIAL_ADMIN_USERS).map((u) =>
+  // Update in memory store without disk writes
+  if (memoryStore.admin_users) {
+    memoryStore.admin_users = memoryStore.admin_users.map((u) =>
       u.id === id ? { ...u, last_login: now } : u
     );
-    saveStore(store);
-  } catch {
-    // Non-fatal if local write fails on read-only serverless filesystem
   }
 }
 
@@ -1606,26 +1366,25 @@ export async function updateAdminPassword(
   newPassword: string
 ): Promise<boolean> {
   const newHash = hashPassword(newPassword);
+  const client = getSupabaseServerClient();
 
-  if (isSupabaseConfigured() && supabase) {
-    try {
-      await supabase
-        .from("admin_users")
-        .update({ password_hash: newHash })
-        .eq("id", id);
-    } catch {
-      // silent fallback
+  if (client) {
+    const { error } = await client
+      .from("admin_users")
+      .update({ password_hash: newHash })
+      .eq("id", id);
+
+    if (error) {
+      console.error("Supabase updateAdminPassword error:", error);
+      throw new Error(`Failed to update admin password in database: ${error.message}`);
     }
+    return true;
   }
 
-  try {
-    const store = ensureStore();
-    store.admin_users = (store.admin_users || INITIAL_ADMIN_USERS).map((u) =>
+  if (memoryStore.admin_users) {
+    memoryStore.admin_users = memoryStore.admin_users.map((u) =>
       u.id === id ? { ...u, password_hash: newHash } : u
     );
-    saveStore(store);
-  } catch {
-    // Non-fatal if local write fails on read-only serverless filesystem
   }
 
   return true;

@@ -204,16 +204,25 @@ export default function AdminPage() {
     checkAuth();
   }, []);
 
+  const getAuthHeaders = (includeContentType = true): Record<string, string> => {
+    const token = typeof window !== "undefined" ? localStorage.getItem("hv_admin_token") : null;
+    const headers: Record<string, string> = {};
+    if (includeContentType) headers["Content-Type"] = "application/json";
+    if (token) headers["Authorization"] = `Bearer ${token}`;
+    return headers;
+  };
+
   // 2. Fetch All Admin Data
   const fetchData = async () => {
     setLoading(true);
     try {
+      const authHeaders = getAuthHeaders(false);
       const [statsRes, productsRes, categoriesRes, ordersRes, customersRes] = await Promise.all([
-        fetch("/api/analytics"),
-        fetch("/api/products"),
-        fetch("/api/categories"),
-        fetch("/api/orders"),
-        fetch("/api/customers"),
+        fetch("/api/analytics", { headers: authHeaders }),
+        fetch("/api/products", { headers: authHeaders }),
+        fetch("/api/categories", { headers: authHeaders }),
+        fetch("/api/orders", { headers: authHeaders }),
+        fetch("/api/customers", { headers: authHeaders }),
       ]);
 
       const [statsData, productsData, categoriesData, ordersData, customersData] = await Promise.all([
@@ -233,6 +242,7 @@ export default function AdminPage() {
       console.error("Failed to load admin data:", err);
     } finally {
       setLoading(false);
+
     }
   };
 
@@ -312,6 +322,7 @@ export default function AdminPage() {
       fd.append("file", file);
       const res = await fetch("/api/upload", {
         method: "POST",
+        headers: getAuthHeaders(false),
         body: fd,
       });
       const data = await res.json();
@@ -355,11 +366,13 @@ export default function AdminPage() {
         fd.append("file", file);
         const res = await fetch("/api/upload", {
           method: "POST",
+          headers: getAuthHeaders(false),
           body: fd,
         });
         const data = await res.json();
         return data.success && data.url ? (data.url as string) : null;
       });
+
 
       const results = await Promise.all(uploadPromises);
       const validUrls = results.filter((url): url is string => Boolean(url));
@@ -724,7 +737,7 @@ Leafora Herbal Private Limited produces authentic classical Rasayana remedies fo
       if (editingProduct) {
         const res = await fetch(`/api/products/${editingProduct.id}`, {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers: getAuthHeaders(true),
           body: JSON.stringify(payload),
         });
         const data = await res.json();
@@ -737,7 +750,7 @@ Leafora Herbal Private Limited produces authentic classical Rasayana remedies fo
       } else {
         const res = await fetch("/api/products", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: getAuthHeaders(true),
           body: JSON.stringify(payload),
         });
         const data = await res.json();
@@ -756,7 +769,10 @@ Leafora Herbal Private Limited produces authentic classical Rasayana remedies fo
   const handleDeleteProduct = async (id: string) => {
     if (!confirm("Are you sure you want to delete this product?")) return;
     try {
-      const res = await fetch(`/api/products/${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/products/${id}`, {
+        method: "DELETE",
+        headers: getAuthHeaders(false),
+      });
       const data = await res.json();
       if (data.success) {
         fetchData();
@@ -791,7 +807,7 @@ Leafora Herbal Private Limited produces authentic classical Rasayana remedies fo
     try {
       const res = await fetch(`/api/orders/${selectedOrder.id}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders(true),
         body: JSON.stringify(orderTrackingForm),
       });
       const data = await res.json();
@@ -800,6 +816,7 @@ Leafora Herbal Private Limited produces authentic classical Rasayana remedies fo
         fetchData();
       } else {
         alert(data.error || "Failed to update order");
+
       }
     } catch (err) {
       console.error("Order update error:", err);

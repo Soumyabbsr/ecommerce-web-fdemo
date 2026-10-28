@@ -16,10 +16,10 @@ export async function GET(request: Request) {
 
     const products = await getProducts({ search, category, inStock, limit, offset });
     return NextResponse.json({ success: true, products });
-  } catch (error) {
-    console.error("Failed to fetch products:", error);
+  } catch (error: any) {
+    console.error("[API] Failed to fetch products:", error);
     return NextResponse.json(
-      { success: false, error: "Failed to load products" },
+      { success: false, error: error?.message || "Failed to load products" },
       { status: 500 }
     );
   }
@@ -27,11 +27,35 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    // 1. Enforce Server-Side Admin Authorization
+    const auth = verifyAdminRequest(request);
+    if (!auth.authenticated) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized: Admin privileges required to add products" },
+        { status: 401 }
+      );
+    }
+
     const body = await request.json();
 
-    if (!body.name || !body.price || !body.image_url) {
+    // 2. Validate Required Fields
+    if (!body.name || !body.name.trim()) {
       return NextResponse.json(
-        { success: false, error: "Product name, selling price, and image URL are required" },
+        { success: false, error: "Product name is required" },
+        { status: 400 }
+      );
+    }
+
+    if (body.price === undefined || isNaN(Number(body.price)) || Number(body.price) < 0) {
+      return NextResponse.json(
+        { success: false, error: "A valid selling price (greater than or equal to 0) is required" },
+        { status: 400 }
+      );
+    }
+
+    if (!body.image_url || !body.image_url.trim()) {
+      return NextResponse.json(
+        { success: false, error: "Primary product image URL is required" },
         { status: 400 }
       );
     }
@@ -45,33 +69,33 @@ export async function POST(request: Request) {
     const newProduct = await createProduct({
       name: body.name.trim(),
       slug: body.slug ? body.slug.trim() : undefined,
-      tagline: body.tagline || "",
-      sku: body.sku?.trim() || `HV-SKU-${Math.floor(1000 + Math.random() * 9000)}`,
+      tagline: body.tagline ? body.tagline.trim() : "",
+      sku: body.sku?.trim() || `LEA-SKU-${Math.floor(1000 + Math.random() * 9000)}`,
       description: body.description || "",
       description_sections: Array.isArray(body.description_sections) ? body.description_sections : [],
       description_images: Array.isArray(body.description_images) ? body.description_images : [],
       images: Array.isArray(body.images) && body.images.length > 0 ? body.images : [body.image_url],
       highlights: Array.isArray(body.highlights) ? body.highlights : [],
-      dosage: body.dosage || "",
+      dosage: body.dosage ? body.dosage.trim() : "",
       ingredients_list: Array.isArray(body.ingredients_list) ? body.ingredients_list : [],
       price,
       original_price: originalPrice,
       save_amount: saveAmount,
       discount_percent: discountPercent,
-      image_url: body.image_url,
-      badge: body.badge || "",
+      image_url: body.image_url.trim(),
+      badge: body.badge ? body.badge.trim() : "",
       is_featured: Boolean(body.is_featured),
       in_stock: body.in_stock !== undefined ? Boolean(body.in_stock) : true,
       stock_quantity: body.stock_quantity !== undefined ? Number(body.stock_quantity) : 100,
-      category: body.category || "Full Kit",
+      category: body.category || "Men's Vitality & Stamina",
       category_id: body.category_id || undefined,
     });
 
     return NextResponse.json({ success: true, product: newProduct }, { status: 201 });
-  } catch (error) {
-    console.error("Failed to create product:", error);
+  } catch (error: any) {
+    console.error("[API] Failed to create product:", error);
     return NextResponse.json(
-      { success: false, error: "Failed to create product" },
+      { success: false, error: error?.message || "Failed to create product in database" },
       { status: 500 }
     );
   }

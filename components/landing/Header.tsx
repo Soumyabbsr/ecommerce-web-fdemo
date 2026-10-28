@@ -109,12 +109,12 @@ export function Header({ onOpenCheckout }: { onOpenCheckout?: () => void }) {
           {/* Action CTAs */}
           <div className="hidden md:flex items-center gap-4">
             <a
-              href="tel:07313626447"
+              href="tel:+918630552164"
               className="flex items-center gap-2 text-xs font-bold text-gray-700 hover:text-emerald-800 transition px-3 py-1.5 rounded-full border border-gray-200 bg-gray-50/70"
             >
               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               <PhoneCall className="w-3.5 h-3.5 text-emerald-700" />
-              <span>0731-3626447</span>
+              <span>+91 8630552164</span>
             </a>
 
             <Link
@@ -212,11 +212,11 @@ export function Header({ onOpenCheckout }: { onOpenCheckout?: () => void }) {
 
             <div className="pt-2 flex flex-col gap-2">
               <a
-                href="tel:07313626447"
+                href="tel:+918630552164"
                 className="w-full py-3 rounded-xl bg-gray-100 text-gray-900 font-extrabold text-xs text-center flex items-center justify-center gap-2"
               >
                 <PhoneCall className="w-4 h-4 text-emerald-700" />
-                <span>Call Helpline: 0731-3626447</span>
+                <span>Call Helpline: +91 8630552164</span>
               </a>
               <Link
                 href="/#products-sec"

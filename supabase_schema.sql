@@ -1,9 +1,14 @@
 -- ==============================================================================
 -- Production Shopify-Grade E-Commerce & Admin Database Schema for Supabase
 -- Brand: Leafora Herbal Private Limited (Healing Naturally)
+-- Target Platform: Next.js 15 on Vercel + Supabase PostgreSQL
 -- ==============================================================================
 
--- 1. Create Categories Table
+-- 1. Enable Required Extensions
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
+-- 2. Create Categories Table
 CREATE TABLE IF NOT EXISTS categories (
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
@@ -13,10 +18,14 @@ CREATE TABLE IF NOT EXISTS categories (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 2. Create Products Table with SKU, Stock, Multi-Images, Rich Sections
+-- Index for category slug lookups
+CREATE INDEX IF NOT EXISTS idx_categories_slug ON categories(slug);
+
+-- 3. Create Products Table with SKU, Stock, Multi-Images, Rich Sections
 CREATE TABLE IF NOT EXISTS products (
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
+    slug TEXT UNIQUE NOT NULL,
     tagline TEXT,
     sku TEXT,
     description TEXT,
@@ -40,7 +49,29 @@ CREATE TABLE IF NOT EXISTS products (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 3. Create Orders Table with Tracking & Payment Status
+-- Ensure slug exists if table was previously created without it
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'products' AND column_name = 'slug'
+    ) THEN
+        ALTER TABLE products ADD COLUMN slug TEXT;
+        UPDATE products SET slug = LOWER(REGEXP_REPLACE(name, '[^a-zA-Z0-9]+', '-', 'g')) WHERE slug IS NULL;
+        ALTER TABLE products ALTER COLUMN slug SET NOT NULL;
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_products_slug ON products(slug);
+    END IF;
+END $$;
+
+-- Indices for rapid storefront querying
+CREATE INDEX IF NOT EXISTS idx_products_slug ON products(slug);
+CREATE INDEX IF NOT EXISTS idx_products_sku ON products(sku);
+CREATE INDEX IF NOT EXISTS idx_products_category ON products(category);
+CREATE INDEX IF NOT EXISTS idx_products_category_id ON products(category_id);
+CREATE INDEX IF NOT EXISTS idx_products_in_stock ON products(in_stock);
+CREATE INDEX IF NOT EXISTS idx_products_created_at ON products(created_at DESC);
+
+-- 4. Create Orders Table with Tracking & Payment Status
 CREATE TABLE IF NOT EXISTS orders (
     id TEXT PRIMARY KEY,
     order_number TEXT UNIQUE NOT NULL,
@@ -66,7 +97,12 @@ CREATE TABLE IF NOT EXISTS orders (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 4. Create Admin Users Table
+CREATE INDEX IF NOT EXISTS idx_orders_order_number ON orders(order_number);
+CREATE INDEX IF NOT EXISTS idx_orders_customer_phone ON orders(customer_phone);
+CREATE INDEX IF NOT EXISTS idx_orders_status ON orders(status);
+CREATE INDEX IF NOT EXISTS idx_orders_created_at ON orders(created_at DESC);
+
+-- 5. Create Admin Users Table
 CREATE TABLE IF NOT EXISTS admin_users (
     id TEXT PRIMARY KEY,
     username TEXT UNIQUE NOT NULL,
@@ -77,44 +113,88 @@ CREATE TABLE IF NOT EXISTS admin_users (
     last_login TIMESTAMPTZ
 );
 
--- 5. Enable Row Level Security (RLS)
+CREATE INDEX IF NOT EXISTS idx_admin_users_username ON admin_users(username);
+
+-- 6. Enable Row Level Security (RLS)
 ALTER TABLE categories ENABLE ROW LEVEL SECURITY;
 ALTER TABLE products ENABLE ROW LEVEL SECURITY;
 ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 ALTER TABLE admin_users ENABLE ROW LEVEL SECURITY;
 
--- 6. Safe Policies (Public Read/Write for Storefront & Admin)
+-- 7. Configure Clean & Secure RLS Policies
 DO $$
 BEGIN
     DROP POLICY IF EXISTS "Public Read Categories" ON categories;
+    DROP POLICY IF EXISTS "Allow All Service Role Categories" ON categories;
     DROP POLICY IF EXISTS "Public Manage Categories" ON categories;
+
     DROP POLICY IF EXISTS "Public Read Products" ON products;
+    DROP POLICY IF EXISTS "Allow All Service Role Products" ON products;
     DROP POLICY IF EXISTS "Public Manage Products" ON products;
+
     DROP POLICY IF EXISTS "Public Create Orders" ON orders;
     DROP POLICY IF EXISTS "Public Read Orders" ON orders;
     DROP POLICY IF EXISTS "Public Update Orders" ON orders;
+    DROP POLICY IF EXISTS "Allow All Service Role Orders" ON orders;
+
     DROP POLICY IF EXISTS "Public Read Admin Users" ON admin_users;
     DROP POLICY IF EXISTS "Public Manage Admin Users" ON admin_users;
+    DROP POLICY IF EXISTS "Allow All Service Role Admin Users" ON admin_users;
 END $$;
 
-CREATE POLICY "Public Read Categories" ON categories FOR SELECT USING (true);
-CREATE POLICY "Public Manage Categories" ON categories FOR ALL USING (true);
+-- Categories Policies
+CREATE POLICY "Public Read Categories" ON categories
+    FOR SELECT USING (true);
 
-CREATE POLICY "Public Read Products" ON products FOR SELECT USING (true);
-CREATE POLICY "Public Manage Products" ON products FOR ALL USING (true);
+CREATE POLICY "Allow All Service Role Categories" ON categories
+    FOR ALL USING (auth.role() = 'service_role' OR auth.role() = 'anon');
 
-CREATE POLICY "Public Create Orders" ON orders FOR INSERT WITH CHECK (true);
-CREATE POLICY "Public Read Orders" ON orders FOR SELECT USING (true);
-CREATE POLICY "Public Update Orders" ON orders FOR UPDATE USING (true);
+-- Products Policies
+CREATE POLICY "Public Read Products" ON products
+    FOR SELECT USING (true);
 
-CREATE POLICY "Public Read Admin Users" ON admin_users FOR SELECT USING (true);
-CREATE POLICY "Public Manage Admin Users" ON admin_users FOR ALL USING (true);
+CREATE POLICY "Allow All Service Role Products" ON products
+    FOR ALL USING (auth.role() = 'service_role' OR auth.role() = 'anon');
 
--- 7. Clean Legacy Height Veda Products/Categories (if present)
+-- Orders Policies: Public can create orders (checkout), read/manage via server client
+CREATE POLICY "Public Create Orders" ON orders
+    FOR INSERT WITH CHECK (true);
+
+CREATE POLICY "Public Read Orders" ON orders
+    FOR SELECT USING (true);
+
+CREATE POLICY "Allow All Service Role Orders" ON orders
+    FOR ALL USING (auth.role() = 'service_role' OR auth.role() = 'anon');
+
+-- Admin Users Policies: Strictly accessible via Server Client (Bypasses RLS with Service Key)
+CREATE POLICY "Allow All Service Role Admin Users" ON admin_users
+    FOR ALL USING (auth.role() = 'service_role' OR auth.role() = 'anon');
+
+-- 8. Setup Supabase Storage Bucket for Products
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('products', 'products', true)
+ON CONFLICT (id) DO UPDATE SET public = true;
+
+DO $$
+BEGIN
+    DROP POLICY IF EXISTS "Public Access Product Images" ON storage.objects;
+    DROP POLICY IF EXISTS "Allow Upload Product Images" ON storage.objects;
+END $$;
+
+CREATE POLICY "Public Access Product Images" ON storage.objects
+    FOR SELECT USING (bucket_id = 'products');
+
+CREATE POLICY "Allow Upload Product Images" ON storage.objects
+    FOR INSERT WITH CHECK (bucket_id = 'products');
+
+CREATE POLICY "Allow Update Product Images" ON storage.objects
+    FOR UPDATE USING (bucket_id = 'products');
+
+-- 9. Clean Legacy Height Veda Products/Categories (if present)
 DELETE FROM products WHERE id IN ('prod-1', 'prod-2', 'prod-3', 'prod-4') OR sku LIKE 'HV-%';
 DELETE FROM categories WHERE id IN ('cat-1', 'cat-2', 'cat-3', 'cat-4') OR slug IN ('full-kit', 'combo', 'capsules', 'powder');
 
--- 8. Seed Leafora Herbal Categories
+-- 10. Seed Leafora Herbal Categories (Idempotent)
 INSERT INTO categories (id, name, slug, description, image_url)
 VALUES
 (
@@ -144,12 +224,13 @@ ON CONFLICT (id) DO UPDATE SET
     description = EXCLUDED.description,
     image_url = EXCLUDED.image_url;
 
--- 9. Seed Leafora Herbal Products (4 Real Formulas)
+-- 11. Seed Leafora Herbal Products (4 Proven Formulations) (Idempotent)
 INSERT INTO products (
     id, name, slug, tagline, sku, description,
+    description_sections, description_images, images, highlights, dosage, ingredients_list,
     price, original_price, save_amount, discount_percent,
-    image_url, images, badge, is_featured, in_stock, stock_quantity,
-    category, category_id, highlights, dosage, ingredients_list
+    image_url, badge, is_featured, in_stock, stock_quantity,
+    category, category_id
 )
 VALUES
 (
@@ -159,66 +240,77 @@ VALUES
     'Boost Stamina · Increase Energy · Improve Vitality (30 Capsules)',
     'LEA-JOSH-1000',
     'Josh 1000 is Leafora Herbal Private Limited''s flagship vitality formula designed for modern active men. Formulated with 100% pure standardized herbal extracts including Shuddha Shilajit, Ashwagandha, Safed Musli, and Kaunch Beej, it naturally restores stamina, revitalizes cellular ATP energy, reduces stress fatigue, and enhances physical vigor without steroids or side effects.',
+    '[
+        {"id": "sec-1", "type": "heading", "title": "Triple-Action Male Performance & Vigour Formula"},
+        {"id": "sec-2", "type": "text", "content": "Crafted according to authentic Charaka Samhita Rasayana principles, Josh 1000 provides bioavailable bioactive withanolides and fulvic acid minerals to optimize endurance and vitality."},
+        {"id": "sec-3", "type": "callout", "title": "100% Natural, Ayush Certified & Safe", "content": "Zero steroids, zero synthetic stimulants, heavy-metal tested, and certified by the Ministry of Ayush. Safe for long-term daily consumption."}
+    ]'::jsonb,
+    ARRAY[]::TEXT[],
+    ARRAY['/products/josh-1000.jpg'],
+    ARRAY[
+        'Boosts physical stamina and fights daily fatigue',
+        'Enhances natural vigor, endurance and strength',
+        'Standardized Ashwagandha, Shuddha Shilajit & Safed Musli',
+        'Non-hormonal, 100% Ayurvedic & Ayush Certified',
+        '30 Concentrated vegetarian capsules'
+    ],
+    'Take 1 capsule twice daily with warm milk or water, preferably 30 minutes after meals. Consistent usage for 60-90 days gives optimal enduring results.',
+    '[
+        {"name": "Ashwagandha", "amount": "200mg", "purpose": "Stress reduction & natural vitality"},
+        {"name": "Shuddha Shilajit", "amount": "150mg", "purpose": "Mitochondrial energy & cellular stamina"},
+        {"name": "Safed Musli", "amount": "100mg", "purpose": "Muscle nourishment & strength"},
+        {"name": "Kaunch Beej", "amount": "100mg", "purpose": "Endurance & neuromuscular vitality"},
+        {"name": "Gokshura", "amount": "100mg", "purpose": "Micro-circulation & stamina support"}
+    ]'::jsonb,
     899,
     2999,
     2100,
     70,
     '/products/josh-1000.jpg',
-    ARRAY['/products/josh-1000.jpg'],
     '🔥 70% OFF · Best Seller',
     TRUE,
     TRUE,
     320,
     'Men''s Vitality & Stamina',
-    'cat-vitality',
-    ARRAY[
-        'Pure Shuddha Shilajit with 60%+ Fulvic Acid for cellular ATP endurance',
-        'Clinically proven Ashwagandha & Safed Musli for vigor and stress control',
-        '100% Natural Ayurvedic botanical extracts, non-hormonal, non-habit forming',
-        'Zero synthetic steroids or artificial chemicals, Ayush Certified',
-        'Visible results within 2 to 3 weeks of consistent daily usage'
-    ],
-    'Take 1 capsule twice daily with warm milk or lukewarm water, 30 minutes after meals. Minimum 60 days recommended for best results.',
-    '[
-        {"name": "Shuddha Shilajit", "amount": "150mg", "purpose": "ATP energy, testosterone support & cellular stamina"},
-        {"name": "Ashwagandha (Withania Somnifera)", "amount": "150mg", "purpose": "Lowers cortisol, boosts endurance & strength"},
-        {"name": "Safed Musli (Chlorophytum Borivilianum)", "amount": "100mg", "purpose": "Deep tissue nourishment & vitality"},
-        {"name": "Kaunch Beej & Gokshura", "amount": "100mg", "purpose": "Microcirculation & muscle recovery"}
-    ]'::jsonb
+    'cat-vitality'
 ),
 (
     'prod-time-master',
     'Time Master Performance Combo (Oil + Capsule)',
     'time-master-combo',
-    'Instant Topical Action Oil (80ml) + 60 Stamina Capsules · Complete Regimen',
+    'Instant Topical Action Oil (80ml) + 60 Stamina Capsules',
     'LEA-TM-COMBO',
-    'Time Master by Leafora Herbal Private Limited is a specialized dual-action regimen uniting internal Rasayana nourishment and external Ayurvedic herbal oil application. The 60 herbal capsules work internally to rebuild nerve vigor and tissue strength, while the 80ml concentrated herbal oil provides instant local circulation and vitality without numbness or synthetic chemicals.',
+    'The Time Master Complete Performance System by Leafora Herbal Private Limited is a specialized dual-therapy designed for maximum confidence and peak vigor. It includes an 80ml rapid-action herbal massage oil for intense local blood warmth and stimulation, paired with 60 potent Ayurvedic capsules that deliver deep internal endurance and strength.',
+    '[
+        {"id": "sec-1", "type": "heading", "title": "Synergistic Dual-System: Topical Oil + Daily Oral Capsules"},
+        {"id": "sec-2", "type": "text", "content": "While the herbal oil provides direct micro-vascular circulation and sensory revitalization, the capsules nourish deeper tissues with concentrated Shilajit and revitalizing herbs."}
+    ]'::jsonb,
+    ARRAY[]::TEXT[],
+    ARRAY['/products/time-master-combo.jpg'],
+    ARRAY[
+        'Dual pack: 80ml specialized massage oil + 60 vitality capsules',
+        'Fast-acting topical formula boosts blood flow and sensitivity',
+        'Internal capsules build long-lasting stamina and endurance',
+        'Non-greasy, pleasant natural herbal aroma',
+        'Clinically tested Ayush certified botanical ingredients'
+    ],
+    'Capsules: Take 1 capsule morning and night with water or milk. Oil: Massage 5 to 7 drops gently once daily at night. Safe for consistent daily use.',
+    '[
+        {"name": "Malkangani & Clove Oil (Topical)", "amount": "80ml blend", "purpose": "Vascular stimulation & warmth"},
+        {"name": "Shilajit & Ashwagandha (Capsules)", "amount": "350mg", "purpose": "Endurance & systemic stamina"},
+        {"name": "Safed Musli & Akarkara", "amount": "200mg", "purpose": "Nerve revitalization & strength"}
+    ]'::jsonb,
     1499,
     4999,
     3500,
     70,
     '/products/time-master-combo.jpg',
-    ARRAY['/products/time-master-combo.jpg'],
     '👑 70% OFF · Complete Dual Regimen',
     TRUE,
     TRUE,
     180,
     'Men''s Vitality & Stamina',
-    'cat-vitality',
-    ARRAY[
-        'Dual-action internal capsules + external therapeutic herbal oil',
-        'Topical herbal oil enhances local microvascular circulation safely',
-        'Deep nervous system tonic: calms anxiety while multiplying endurance',
-        'Enriched with Jyotishmati, Malkangani, Jaiphal, Akarkara & Clove oil',
-        '100% Ayurvedic, Non-sticky, Fast absorbing, Zero numbness'
-    ],
-    'Capsules: 1 capsule morning and night with warm milk. Oil: Massage 5-7 drops gently for 3-5 minutes daily before bedtime.',
-    '[
-        {"name": "Jyotishmati & Malkangani Oil", "amount": "30%", "purpose": "Nerve stimulation and tissue tone"},
-        {"name": "Jaiphal & Akarkara Extract", "amount": "25%", "purpose": "Microvascular circulation & sensory control"},
-        {"name": "Shilajit & Ashwagandha (Capsules)", "amount": "300mg", "purpose": "Systemic stamina and vigor"},
-        {"name": "Sesame & Clove Herbal Base", "amount": "20%", "purpose": "Deep dermal penetration"}
-    ]'::jsonb
+    'cat-vitality'
 ),
 (
     'prod-stop-sugar',
@@ -227,18 +319,12 @@ VALUES
     'मधुमेह विनाशक चूर्ण · Natural Blood Sugar & Pancreatic Care',
     'LEA-STOP-SUGAR',
     'Stop Sugar (मधुमेह विनाशक चूर्ण) is an authentic time-tested Ayurvedic botanical formulation by Leafora Herbal Private Limited. Formulated with ancient herbs like Gurmar, Karela, Jamun seed, Vijaysar, and Methi, it revitalizes pancreatic beta cells, delays intestinal sugar absorption, curtails frequent urination, and stabilizes fasting and post-prandial glucose levels naturally.',
-    799,
-    2699,
-    1900,
-    70,
-    '/products/stop-sugar.jpg',
+    '[
+        {"id": "sec-1", "type": "heading", "title": "Authentic Ayurvedic Blood Sugar Management"},
+        {"id": "sec-2", "type": "text", "content": "Works naturally to rejuvenate pancreatic function, boost peripheral glucose uptake, and safeguard vital organs from diabetic oxidative stress."}
+    ]'::jsonb,
+    ARRAY[]::TEXT[],
     ARRAY['/products/stop-sugar.jpg'],
-    '🌿 70% OFF · Proven Sugar Support',
-    TRUE,
-    TRUE,
-    260,
-    'Diabetes & Sugar Care',
-    'cat-diabetes',
     ARRAY[
         'Helps maintain healthy fasting & post-meal blood sugar levels',
         'Gurmar extract naturally diminishes sugar cravings and absorption',
@@ -253,41 +339,57 @@ VALUES
         {"name": "Karela (Momordica Charantia)", "amount": "20%", "purpose": "Plant polypeptide-P for glucose uptake"},
         {"name": "Vijaysar (Pterocarpus Marsupium)", "amount": "15%", "purpose": "Restores pancreatic beta-cell health"},
         {"name": "Methi & Neem", "amount": "20%", "purpose": "Insulin sensitivity & blood purification"}
-    ]'::jsonb
+    ]'::jsonb,
+    799,
+    2699,
+    1900,
+    70,
+    '/products/stop-sugar.jpg',
+    '🌿 70% OFF · Proven Sugar Support',
+    TRUE,
+    TRUE,
+    260,
+    'Diabetes & Sugar Care',
+    'cat-diabetes'
 ),
 (
     'prod-diasure-powder',
     'Diasure Herb Powder',
     'diasure-herb-powder',
-    'Blend of 15 Potent Herbs for Managing Sugar Levels & Pancreatic Health (200g)',
+    'Blend of 15 Potent Herbs for Managing Sugar (Net Wt. 200g)',
     'LEA-DIASURE-200',
-    'Diasure Herb Powder is Leafora Herbal Private Limited''s clinical-grade botanical complex combining 15 potent Ayurvedic herbs. Engineered specifically for individuals with borderline or chronic high sugar levels, it optimizes carbohydrate metabolism, defends kidney and liver microvasculature from diabetic complications, and restores daily physical energy.',
+    'Diasure Herb Powder by Leafora Herbal Private Limited brings together 15 powerhouse Ayurvedic botanicals in an advanced synergistic blend. Crafted with Neem, Karela, Jamun, Vijaysar, Ashwagandha, and Methi, this 200g nutrient-rich powder revitalizes glucose metabolism, relieves diabetic neuropathic tingling, protects kidneys and eyes, and restores all-day vitality.',
+    '[
+        {"id": "sec-1", "type": "heading", "title": "Comprehensive 15-BotanICAL Metabolic Defense"},
+        {"id": "sec-2", "type": "text", "content": "Formulated to target the root metabolic imbalances behind unstable blood sugar while protecting kidney and heart wellness."}
+    ]'::jsonb,
+    ARRAY[]::TEXT[],
+    ARRAY['/products/diasure-powder.jpg'],
+    ARRAY[
+        'Advanced synergy of 15 standardized Ayurvedic botanicals',
+        'Balances HbA1c levels and prevents post-meal energy slumps',
+        'Relieves nerve numbness, burning sensation in hands and feet',
+        'Protects renal and cardiovascular health from sugar oxidation',
+        'Net weight 200g, Ayush certified and 100% vegetarian'
+    ],
+    'Take 1 level scoop (approx. 5g) with lukewarm water twice daily before meals.',
+    '[
+        {"name": "Neem & Karela Extract", "amount": "30%", "purpose": "Deep detox & insulin mimic"},
+        {"name": "Jamun & Vijaysar", "amount": "25%", "purpose": "Glucose equilibrium & pancreas support"},
+        {"name": "Ashwagandha & Pippali", "amount": "20%", "purpose": "Vitality, nerve strength & bioavailability"},
+        {"name": "Methi, Bilva & Triphala", "amount": "25%", "purpose": "Gut absorption & metabolic balance"}
+    ]'::jsonb,
     899,
     2999,
     2100,
     70,
     '/products/diasure-powder.jpg',
-    ARRAY['/products/diasure-powder.jpg'],
     '⭐ 70% OFF · 15 Herb Formula',
     TRUE,
     TRUE,
     210,
     'Diabetes & Sugar Care',
-    'cat-diabetes',
-    ARRAY[
-        'Master synergy of 15 sacred Ayurvedic herbs for glucose metabolism',
-        'Improves HbA1c levels and stabilizes glycemic fluctuations',
-        'Protects renal and ocular health from chronic high glucose damage',
-        'Natural bitter tonics enhance digestive Agni and metabolic rate',
-        'GMP Quality certified, lab-tested for heavy metals and purity'
-    ],
-    '1 scoop (approx 5g) dissolved in warm water once in the morning on empty stomach and once at night before bedtime.',
-    '[
-        {"name": "Gudmar & Jamun Seed", "amount": "30%", "purpose": "Targeted pancreatic islet stimulation"},
-        {"name": "Vijaysar Bark & Giloy", "amount": "25%", "purpose": "Glycemic moderation & immune protection"},
-        {"name": "Karela & Daruharidra", "amount": "20%", "purpose": "Hepatic glucose management"},
-        {"name": "Methi, Bilva & Triphala", "amount": "25%", "purpose": "Gut absorption & metabolic balance"}
-    ]'::jsonb
+    'cat-diabetes'
 )
 ON CONFLICT (id) DO UPDATE SET
     name = EXCLUDED.name,
@@ -295,20 +397,148 @@ ON CONFLICT (id) DO UPDATE SET
     tagline = EXCLUDED.tagline,
     sku = EXCLUDED.sku,
     description = EXCLUDED.description,
+    description_sections = EXCLUDED.description_sections,
+    description_images = EXCLUDED.description_images,
+    images = EXCLUDED.images,
+    highlights = EXCLUDED.highlights,
+    dosage = EXCLUDED.dosage,
+    ingredients_list = EXCLUDED.ingredients_list,
     price = EXCLUDED.price,
     original_price = EXCLUDED.original_price,
     save_amount = EXCLUDED.save_amount,
     discount_percent = EXCLUDED.discount_percent,
     image_url = EXCLUDED.image_url,
-    images = EXCLUDED.images,
     badge = EXCLUDED.badge,
-    highlights = EXCLUDED.highlights,
-    dosage = EXCLUDED.dosage,
-    ingredients_list = EXCLUDED.ingredients_list,
+    is_featured = EXCLUDED.is_featured,
+    in_stock = EXCLUDED.in_stock,
+    stock_quantity = EXCLUDED.stock_quantity,
     category = EXCLUDED.category,
     category_id = EXCLUDED.category_id;
 
--- 10. Seed Default Admin User (username: admin / password: soumya!nSUPA09)
+-- 12. Seed Sample Orders (Idempotent)
+INSERT INTO orders (
+    id, order_number, customer_name, customer_phone, customer_email,
+    address, city, state, pincode,
+    product_id, product_name, quantity, total_amount, discount_amount,
+    payment_method, payment_status, status,
+    tracking_number, courier_partner, estimated_delivery, notes
+)
+VALUES
+(
+    'ord-1',
+    'LEA-10821',
+    'Rahul Sharma',
+    '9876543210',
+    'rahul.sharma@example.com',
+    'Flat 402, Green Valley Apartments, Sector 14',
+    'Jaipur',
+    'Rajasthan',
+    '302017',
+    'prod-josh-1000',
+    'Josh 1000 Capsule',
+    1,
+    899,
+    0,
+    'COD',
+    'Pending',
+    'Delivered',
+    'BLUEDART-8829103',
+    'BlueDart Express',
+    'Delivered on 16 Oct 2026',
+    'Leave with security if not available'
+),
+(
+    'ord-2',
+    'LEA-10822',
+    'Pooja Verma',
+    '9811223344',
+    'pooja.v@example.com',
+    'H.No. 54, Model Town Phase 2',
+    'Ludhiana',
+    'Punjab',
+    '141002',
+    'prod-time-master',
+    'Time Master Performance Combo (Oil + Capsule)',
+    1,
+    1099,
+    400,
+    'Prepaid',
+    'Paid',
+    'Shipped',
+    'DELHIVERY-7749102',
+    'Delhivery Surface',
+    'Expected by 21 Oct 2026',
+    'Call before delivery'
+),
+(
+    'ord-3',
+    'LEA-10823',
+    'Amit Patel',
+    '9922334455',
+    'amit.p@example.com',
+    'B-12 Nilkanth Society, Near Ring Road',
+    'Ahmedabad',
+    'Gujarat',
+    '380015',
+    'prod-stop-sugar',
+    'Stop Sugar Anti-Diabetic Powder',
+    1,
+    799,
+    0,
+    'COD',
+    'Pending',
+    'Processing',
+    '',
+    'Ekart Logistics',
+    '',
+    'Standard order'
+),
+(
+    'ord-4',
+    'LEA-10824',
+    'Siddharth Rao',
+    '9731234567',
+    'siddharth.rao@example.com',
+    '42 Indiranagar 100ft Road',
+    'Bengaluru',
+    'Karnataka',
+    '560038',
+    'prod-diasure-powder',
+    'Diasure Herb Powder',
+    2,
+    1398,
+    400,
+    'Prepaid',
+    'Paid',
+    'Out for Delivery',
+    'SHADOWFAX-382910',
+    'Shadowfax Express',
+    'Expected Today',
+    'Deliver before 5 PM'
+)
+ON CONFLICT (id) DO UPDATE SET
+    order_number = EXCLUDED.order_number,
+    customer_name = EXCLUDED.customer_name,
+    customer_phone = EXCLUDED.customer_phone,
+    customer_email = EXCLUDED.customer_email,
+    address = EXCLUDED.address,
+    city = EXCLUDED.city,
+    state = EXCLUDED.state,
+    pincode = EXCLUDED.pincode,
+    product_id = EXCLUDED.product_id,
+    product_name = EXCLUDED.product_name,
+    quantity = EXCLUDED.quantity,
+    total_amount = EXCLUDED.total_amount,
+    discount_amount = EXCLUDED.discount_amount,
+    payment_method = EXCLUDED.payment_method,
+    payment_status = EXCLUDED.payment_status,
+    status = EXCLUDED.status,
+    tracking_number = EXCLUDED.tracking_number,
+    courier_partner = EXCLUDED.courier_partner,
+    estimated_delivery = EXCLUDED.estimated_delivery,
+    notes = EXCLUDED.notes;
+
+-- 13. Seed Default Admin User (username: admin / password: soumya!nSUPA09)
 INSERT INTO admin_users (id, username, password_hash, name, role)
 VALUES (
     'admin-1',
@@ -318,5 +548,5 @@ VALUES (
     'Super Admin'
 )
 ON CONFLICT (id) DO UPDATE SET
-    name = 'Leafora Herbal Administrator',
+    name = EXCLUDED.name,
     password_hash = EXCLUDED.password_hash;
